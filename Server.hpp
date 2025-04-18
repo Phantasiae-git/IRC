@@ -2,6 +2,7 @@
 #define SERVER_HPP
 
 #include <string>
+#include <iostream>
 
 class Server
 {
