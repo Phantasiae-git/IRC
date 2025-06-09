@@ -11,10 +11,10 @@
 #include <fcntl.h>
 #include <vector>
 #include <arpa/inet.h>
+#include <stdlib.h>
 
-#define PORT 6667
-
-int get_listen_sock();
-void *get_in_addr(sockaddr *sa);
+int     get_listen_sock(int port);
+void    *get_in_addr(sockaddr *sa);
+bool    isValidPort(const char* portStr, int& portOut);
 
 #endif

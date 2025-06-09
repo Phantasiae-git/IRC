@@ -4,29 +4,31 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <map>
 #include <poll.h>
 #include <sys/socket.h>
 #include "utils.hpp"
+#include "Client.hpp"
 
 class Server
 {
 private:
-    int listener_fd;
-    std::vector<pollfd> pfds;
+	int						listener_fd;
+	int						port;
+	std::string				password;
+	std::vector<pollfd>		pfds;
+	std::map<int, Client*>	clients;
 
-    void acceptNewClient();
-    void handleClientData(int i);
-    void disconnectClient(int i);
-    Server(const std::string &name);
-    Server(const Server &other);
-    Server &operator=(const Server &other);
+	void acceptNewClient();
+	void handleClientData(int i);
+	void disconnectClient(int i);
 
 public:
-    Server();
-    ~Server();
-    
-    bool start();
-    void run();
+	Server(int portOut, std::string password);
+	~Server();
+	
+	bool start();
+	void run();
 };
 
 #endif

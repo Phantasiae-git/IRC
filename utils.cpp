@@ -1,11 +1,22 @@
 #include "utils.hpp"
 
+bool isValidPort(const char* portStr, int& portOut) {
+
+    long port = atol(portStr);
+    
+    if (port < 1024 || port > 65535) {
+        return false;
+    }
+    portOut = static_cast<int>(port);
+    return true;
+}
+
 void *get_in_addr(sockaddr *sa)
 {
 	return &(((sockaddr_in*)sa)->sin_addr);
 }
 
-int get_listen_sock()
+int get_listen_sock(int port)
 {
 	int listener_fd;
 	int yes = 1;
@@ -23,7 +34,7 @@ int get_listen_sock()
 	}
 	memset(&server_addr, 0, sizeof server_addr);
 	server_addr.sin_family=AF_INET;
-	server_addr.sin_port=htons(PORT);
+	server_addr.sin_port=htons(port);
 	server_addr.sin_addr.s_addr=INADDR_ANY;
 
 	if(bind(listener_fd, (sockaddr *)&server_addr, sizeof server_addr) < 0) {

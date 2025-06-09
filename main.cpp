@@ -62,18 +62,21 @@
 
 int main(int argc, char **argv)
 {
-	if(argc!=3) {
-		std::cout << "usage: ./ircserv port password" << std::endl;
+	if(argc != 3) {
+		std::cout << "Usage: ./ircserv Port Password" << std::endl;
 		return 1;
 	}
-	if(strcmp(argv[1], "6667") != 0) {
-	    std::cout << "port is 6667" << std::endl;
-	    return 1;
+
+	int port;
+	if (isValidPort(argv[1], port) == false) {
+		std::cerr << "Invalid port: " << argv[1] << " (must be a number between 1024 and 65535)" << std::endl;
+		return 1;
 	}
 
-	Server server;
+	Server server(port, argv[2]);
 	if (!server.start()) {
 		std::cerr << "failed to start server" << std::endl;
+		return 1;
 	}
 	server.run();
 	return 0;

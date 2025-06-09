@@ -1,7 +1,9 @@
 #include "Server.hpp"
 
-Server::Server()
-: listener_fd(-1) {}
+Server::Server(int portOut, std::string pswd)
+: listener_fd(-1), port(portOut), password(pswd) {
+    std::cout << "Server started with port " << port << std::endl; 
+}
 
 Server::~Server() {
     std::cout << "Server destructor called" << std::endl;
@@ -85,7 +87,7 @@ void Server::disconnectClient(int i) {
 }
 
 bool Server::start() {
-    int listener_fd = get_listen_sock();
+    int listener_fd = get_listen_sock(port);
 	if (listener_fd == -1) {
 		std::cerr << "failed to create listener socket" << std::endl;
 		return false;
