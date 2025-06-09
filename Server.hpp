@@ -25,7 +25,7 @@ public:
     Server();
     ~Server();
     
-    bool start(int port);
+    bool start();
     void run();
 };
 

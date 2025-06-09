@@ -8,8 +8,7 @@ void *get_in_addr(sockaddr *sa)
 int get_listen_sock()
 {
 	int listener_fd;
-	int yes=1;
-	int rv;
+	int yes = 1;
 
 	sockaddr_in server_addr;
 

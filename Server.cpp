@@ -66,7 +66,7 @@ void Server::handleClientData(int i) {
                 // k <senha>: o user precisa de senha para aceder canal
                 // o <username>: garante privilegios de operador
                 // l <n>: define limite de users
-        for(int j=0; j<pfds.size(); j++)
+        for(size_t j = 0; j < pfds.size(); j++)
         {
             int dest_fd = pfds[j].fd;
             if (dest_fd!=listener_fd && dest_fd != sender_fd)
@@ -84,7 +84,7 @@ void Server::disconnectClient(int i) {
     pfds.erase(pfds.begin() + i);
 }
 
-bool Server::start(int port) {
+bool Server::start() {
     int listener_fd = get_listen_sock();
 	if (listener_fd == -1) {
 		std::cerr << "failed to create listener socket" << std::endl;
@@ -104,7 +104,7 @@ void Server::run() {
 			break;
 		}
 
-		for(int i=0; i<pfds.size(); i++)
+		for(size_t i = 0; i < pfds.size(); i++)
 		{
 			if (pfds[i].revents & (POLLIN)) {
 				if (pfds[i].fd == listener_fd) {

@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 	}
 
 	Server server;
-	if (!server.start(6667)) {
+	if (!server.start()) {
 		std::cerr << "failed to start server" << std::endl;
 	}
 	server.run();
