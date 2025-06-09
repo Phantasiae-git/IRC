@@ -3,20 +3,30 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
+#include <poll.h>
+#include <sys/socket.h>
+#include "utils.hpp"
 
 class Server
 {
 private:
-    int server_fd;
+    int listener_fd;
+    std::vector<pollfd> pfds;
+
+    void acceptNewClient();
+    void handleClientData(int i);
+    void disconnectClient(int i);
+    Server(const std::string &name);
+    Server(const Server &other);
+    Server &operator=(const Server &other);
 
 public:
     Server();
-    Server(const std::string &name);
-    Server(const Server &other);
     ~Server();
-
-    Server &operator=(const Server &other);
-    // Other public member functions
+    
+    bool start(int port);
+    void run();
 };
 
-#endif // Server_HPP
+#endif
