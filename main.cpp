@@ -123,7 +123,7 @@ int main(int argc, char **argv)
     //     std::cout << "usage: ./ircserv port password" << std::endl;
     //     return 1;
     // }
-    // if(argv[1]!="6667")
+    // if(argv[1]!="6667") strcmp(argv[1], "6667") != 0
     // {
     //     std::cout << "port is 6667" << std::endl;
     //     return 1;
@@ -149,10 +149,11 @@ int main(int argc, char **argv)
 
         for(int i=0; i<pfds.size(); i++)
         {
-            if(pfds[i].revents & (POLLIN | POLLHUP))
+            if(pfds[i].revents & (POLLIN | POLLHUP)) // podemos colocar so POLLIN e lidar com o  PULLHUP no else
             {
                 if(pfds[i].fd==listener)
                 {
+                    // novo cliente
                     sockaddr_in client_addr;
                     socklen_t cl_addr_len =sizeof client_addr;
 
@@ -163,6 +164,7 @@ int main(int argc, char **argv)
                     }
                     else
                     {
+                        // criar cliente
                         pfds.push_back((pollfd){clientfd, POLLIN, 0});
                         std::cout << "yay! new connection from " << inet_ntoa(client_addr.sin_addr) <<" on socket "<< clientfd << std::endl;
                     }
@@ -170,6 +172,8 @@ int main(int argc, char **argv)
                 }
                 else
                 {
+                    // obter dados de um cliente existente
+                    // usar um std::map para guardar os clients e usar os fds como indice e.g., std::map<int, Client*> clients
                     char buf[256];
                     int nbytes= recv(pfds[i].fd, buf, sizeof buf, 0);
                     int sender_fd = pfds[i].fd;
@@ -186,12 +190,38 @@ int main(int argc, char **argv)
                     }
                     else
                     {
+                        // Guardar mensagem no input_buffer (append()) para ser feita transmissão só de uma mensagens completa "\r\n" de cada vez
+                        // poderá haver no input_buffer partes da mensagem até estar completa ou mais do que uma mensagem completa obtida pelo recv()
+                        // loop para obter menssagem completa usar find() e substr()
+                        // usar outra string e.g, msg, para usar como mensagem completa
+                        // fazer erase do buffer
+                        
+                        // implementar comandos IMPORTANTANTE!!: é preciso fazer parsing da mensagem!
+                            // NICK: atualiza nickname do cliente
+                            // USER: armazena info do usuário
+                            // JOIN: adiciona cliente a canal (criar canal se não existir)
+                            // PART: remove cliente do canal
+                            // PRIVMSG: envia mensagem para o cliente ou canal alvo
+                            // PING: responder com PONG
+                            // QUIT: fecha conexão, remove cliente
+                            // LIST: listar canais disponíveis
+                            // NAMES   : listar usuários num canal
+                            // por parte do operador:
+                            // KICK: remove um client do canal
+                            // INVITE: permite convidar um user para canal
+                            // TOPIC: define o tópico do canal
+                            // MODE: define o modo
+                                // i: canal com entrada por INVITE
+                                // t: o tópico do canal só pode ser modificado pelo operador
+                                // k <senha>: o user precisa de senha para aceder canal
+                                // o <username>: garante privilegios de operador
+                                // l <n>: define limite de users
                         for(int j=0; j<pfds.size(); j++)
                         {
                             int dest_fd = pfds[j].fd;
                             if(dest_fd!=listener && dest_fd != sender_fd)
                             {
-                                if (send(dest_fd, buf, nbytes, 0) == -1) {
+                                if (send(dest_fd, buf, nbytes, 0) == -1) { // usar a msg em vez de buf
                                     std::cerr << "send error: "<< errno << std::endl;
                                 }
                             }
