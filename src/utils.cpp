@@ -1,4 +1,30 @@
-#include "utils.hpp"
+#include "../includes/utils.hpp"
+
+std::string toUpper(const std::string& input) {
+    std::string result = input;
+    for (std::string::size_type i = 0; i < result.size(); ++i) {
+        result[i] = std::toupper(static_cast<unsigned char>(result[i]));
+    }
+    return result;
+}
+
+std::vector<std::string> split(const std::string &line) {
+
+	std::vector<std::string> result;
+	std::istringstream iss(line);
+	std::string word;
+
+	while (iss >> word) {
+		if (word[0] == ':') {
+			std::string rest;
+			std::getline(iss, rest);
+			result.push_back(word + rest);
+			break;
+		}
+		result.push_back(word);
+	}
+	return result;
+}
 
 bool isValidPort(const char* portStr, int& portOut) {
 

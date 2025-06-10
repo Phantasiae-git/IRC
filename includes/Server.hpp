@@ -13,9 +13,9 @@
 class Server
 {
 private:
-	int						listener_fd;
-	int						port;
-	std::string				password;
+	int						_listener_fd;
+	int						_port;
+	std::string				_password;
 	std::vector<pollfd>		pfds;
 	std::map<int, Client*>	clients;
 
@@ -24,7 +24,7 @@ private:
 	void disconnectClient(int i);
 
 public:
-	Server(int portOut, std::string password);
+	Server(int port, std::string password);
 	~Server();
 	
 	bool start();

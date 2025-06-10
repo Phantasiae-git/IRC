@@ -1,9 +1,7 @@
-#include "Server.hpp"
+#include "../includes/Server.hpp"
 
-Server::Server(int portOut, std::string pswd)
-: listener_fd(-1), port(portOut), password(pswd) {
-    std::cout << "Server started with port " << port << std::endl; 
-}
+Server::Server(int port, std::string pswd)
+: _listener_fd(-1), _port(port), _password(pswd) {}
 
 Server::~Server() {
     std::cout << "Server destructor called" << std::endl;
@@ -14,7 +12,7 @@ void Server::acceptNewClient() {
     sockaddr_in client_addr;
     socklen_t cl_addr_len = sizeof client_addr;
 
-    int clientfd = accept(listener_fd, (sockaddr *)&client_addr, &cl_addr_len);
+    int clientfd = accept(_listener_fd, (sockaddr *)&client_addr, &cl_addr_len);
     if (clientfd < 0)
     {
         std::cerr << "accept failed: "<<errno << std::endl;
@@ -49,29 +47,10 @@ void Server::handleClientData(int i) {
         // fazer erase do buffer
         
         // implementar comandos IMPORTANTANTE!!: é preciso fazer parsing da mensagem!
-            // NICK: atualiza nickname do cliente
-            // USER: armazena info do usuário
-            // JOIN: adiciona cliente a canal (criar canal se não existir)
-            // PART: remove cliente do canal
-            // PRIVMSG: envia mensagem para o cliente ou canal alvo
-            // PING: responder com PONG
-            // QUIT: fecha conexão, remove cliente
-            // LIST: listar canais disponíveis
-            // NAMES   : listar usuários num canal
-            // por parte do operador:
-            // KICK: remove um client do canal
-            // INVITE: permite convidar um user para canal
-            // TOPIC: define o tópico do canal
-            // MODE: define o modo
-                // i: canal com entrada por INVITE
-                // t: o tópico do canal só pode ser modificado pelo operador
-                // k <senha>: o user precisa de senha para aceder canal
-                // o <username>: garante privilegios de operador
-                // l <n>: define limite de users
         for(size_t j = 0; j < pfds.size(); j++)
         {
             int dest_fd = pfds[j].fd;
-            if (dest_fd!=listener_fd && dest_fd != sender_fd)
+            if (dest_fd != _listener_fd && dest_fd != sender_fd)
             {
                 if (send(dest_fd, buf, nbytes, 0) == -1) { // usar a msg em vez de buf
                     std::cerr << "send error: "<< errno << std::endl;
@@ -87,12 +66,13 @@ void Server::disconnectClient(int i) {
 }
 
 bool Server::start() {
-    int listener_fd = get_listen_sock(port);
-	if (listener_fd == -1) {
-		std::cerr << "failed to create listener socket" << std::endl;
+    _listener_fd = get_listen_sock(_port);
+	if (_listener_fd == -1) {
+		std::cerr << "Failed to create listener socket" << std::endl;
 		return false;
 	}
-	pfds.push_back((pollfd){listener_fd, POLLIN, 0});
+	pfds.push_back((pollfd){_listener_fd, POLLIN, 0});
+    std::cout << "Server started with port " << _port << std::endl; 
     return true;
 }
 
@@ -109,7 +89,7 @@ void Server::run() {
 		for(size_t i = 0; i < pfds.size(); i++)
 		{
 			if (pfds[i].revents & (POLLIN)) {
-				if (pfds[i].fd == listener_fd) {
+				if (pfds[i].fd == _listener_fd) {
 					acceptNewClient();
 				}
                 else {
