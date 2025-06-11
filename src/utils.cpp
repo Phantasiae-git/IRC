@@ -81,3 +81,7 @@ int get_listen_sock(int port)
 
 	return listener_fd;
 }
+
+void signalHandler(int signum) {
+    (void)signum;
+}

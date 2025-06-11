@@ -19,5 +19,6 @@ void                        *get_in_addr(sockaddr *sa);
 bool                        isValidPort(const char* portStr, int& portOut);
 std::vector<std::string>    split(const std::string &line);
 std::string                 toUpper(const std::string& input);
+void signalHandler(int signum);
 
 #endif

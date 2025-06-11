@@ -72,6 +72,9 @@ void Server::disconnectClient(int i)
 
 bool Server::start()
 {
+    signal(SIGINT, signalHandler);
+    signal(SIGQUIT, signalHandler);
+
     _listener_fd = get_listen_sock(_port);
     if (_listener_fd == -1)
     {
@@ -120,8 +123,8 @@ void Server::run()
     }
     catch (const std::exception &e)
     {
-        for (size_t i = 0; i < pfds.size(); i++)
-            disconnectClient(i--);
+        while (!pfds.empty())
+            disconnectClient(0);
         std::cerr << e.what() << '\n';
     }
 }
