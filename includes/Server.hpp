@@ -9,6 +9,7 @@
 #include <sys/socket.h>
 #include "utils.hpp"
 #include "Client.hpp"
+#include <csignal>
 
 class Server
 {
@@ -22,6 +23,7 @@ private:
 	void acceptNewClient();
 	void handleClientData(int i);
 	void disconnectClient(int i);
+	void SignalHandler(int signum);
 
 public:
 	Server(int port, std::string password);

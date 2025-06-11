@@ -63,6 +63,12 @@ int get_listen_sock(int port)
 	server_addr.sin_port=htons(port);
 	server_addr.sin_addr.s_addr=INADDR_ANY;
 
+	if(fcntl(listener_fd, F_SETFL, O_NONBLOCK)!=0)
+    {
+        std::cerr << "setting non-block error: "<< errno << std::endl;
+        return(1);
+    }
+
 	if(bind(listener_fd, (sockaddr *)&server_addr, sizeof server_addr) < 0) {
 		std::cerr << "bind: " << errno << std::endl;
 		return -1;
