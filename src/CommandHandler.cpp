@@ -22,6 +22,7 @@
     // l <n>: define limite de users
 
 CommandHandler::CommandHandler() {
+    _commands["PASS"] = new PassCommand();
     _commands["NICK"] = new NickCommand();
     //_commands["USER"] = new UserCommand();
     // _commands["JOIN"] = new JoinCommand();

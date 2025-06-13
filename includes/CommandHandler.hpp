@@ -10,6 +10,7 @@
 #include "commands/ACommand.hpp"
 #include "commands/NickCommand.hpp"
 #include "commands/UserCommand.hpp"
+#include "commands/PassCommand.hpp"
 
 class CommandHandler
 {

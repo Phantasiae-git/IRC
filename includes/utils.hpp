@@ -13,6 +13,8 @@
 #include <arpa/inet.h>
 #include <stdlib.h>
 #include <sstream>
+#include <map>
+#include "Client.hpp"
 
 int                         get_listen_sock(int port);
 void                        *get_in_addr(sockaddr *sa);
