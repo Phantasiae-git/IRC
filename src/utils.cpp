@@ -66,7 +66,7 @@ int get_listen_sock(int port)
 	if(fcntl(listener_fd, F_SETFL, O_NONBLOCK)!=0)
     {
         std::cerr << "setting non-block error: "<< errno << std::endl;
-        return(1);
+        return -1;
     }
 
 	if(bind(listener_fd, (sockaddr *)&server_addr, sizeof server_addr) < 0) {
@@ -80,8 +80,4 @@ int get_listen_sock(int port)
 	}
 
 	return listener_fd;
-}
-
-void signalHandler(int signum) {
-	exit(signum);
 }
