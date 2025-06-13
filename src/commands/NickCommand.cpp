@@ -26,7 +26,7 @@ bool	NickCommand::is_validNickName(const std::string &nickname)
 Verificar nicks iguais (loop)
 */
 
-bool is_duplicateNick(const Server &server, const std::string &nick)
+bool NickCommand::is_duplicateNick(const Server &server, const std::string &nick)
 {
     const std::map<int, Client*> &clients = server.getClients();
 
