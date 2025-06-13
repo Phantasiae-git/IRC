@@ -6,20 +6,21 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <map>
 
 class Client;
 
 class Channel
 {
 private:
-    std::vector<Client *> users;
+    std::map<std::string, Client *> users;
     std::string name;
     std::string topic;
     bool invonly;
     bool pass;
-    std::vector<Client *> invited;
+    std::map<std::string, Client *> invited;
     std::string password;
-	std::vector<Client *> operators;
+	std::map<std::string, Client *> operators;
 	bool t;//1 only ops can, 0 anyone can
 
 public:
@@ -35,8 +36,7 @@ public:
     void setPassword(std::string pass);
 	std::string getName();
 	int isOperator(Client *client);
-	std::vector<Client *> getUsers();
-	void removeUser(Client *user);
+	void removeUser(std::string name);
     std::string getTopic() const;
     void setTopic(std::string topic);
 };

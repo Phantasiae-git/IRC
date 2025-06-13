@@ -4,8 +4,8 @@
 
 Channel::Channel(const std::string &name, Client *creator) : name(name)
 {
-	users.push_back(creator);
-	operators.push_back(creator);
+	users.insert(std::make_pair(creator->getUsername(), creator));
+	operators.insert(std::make_pair(creator->getUsername(), creator));
 	invonly=0;
 	pass=0;
 	t=0;
@@ -49,13 +49,13 @@ Channel &Channel::operator=(const Channel &other)
 
 void Channel::addUser(Client *user, std::string pword)
 {
-	if (std::find(users.begin(), users.end(), user) != users.end())
+	if (users.find(user->getUsername())!=users.end())
    		return;
-	if(invonly && (std::find(invited.begin(), invited.end(), user) == invited.end()))
+	if(invonly && (invited.find(user->getUsername())==users.end()))
 		return;
 	if(pass && pword!=password)
 		return;
-	users.push_back(user);
+	users.insert(std::make_pair(user->getUsername(), user));;
 	user->addChannel(name, this);
 }
 
@@ -64,9 +64,9 @@ void Channel::broadCast(Client *client, std::string msg)
 {
     int sender_fd = client->getFd();
 
-    for (size_t j = 0; j < users.size(); j++)
+    for (std::map<std::string, Client *>::iterator it=users.begin(); it!=users.end(); it++)
     {   
-        int dest_fd = users[j]->getFd();
+        int dest_fd = it->second->getFd();
 
         if (dest_fd != sender_fd)
         {
@@ -83,20 +83,12 @@ std::string Channel::getName()
 
 int Channel::isOperator(Client *client)
 {
-	if(std::find(operators.begin(),operators.end(), client)!=operators.end())
-		return 1;
-	else
-		return 0;
+	return (operators.find(client->getUsername())!=operators.end());
 }
 
-std::vector<Client *> Channel::getUsers()
+void Channel::removeUser(std::string name)
 {
-	return users;
-}
-
-void Channel::removeUser(Client *user)
-{
-	std::vector<Client *>::iterator userpos=std::find(users.begin(),users.end(), user);
+	std::map<std::string, Client *>::iterator userpos=users.find(name);
 	if(userpos!=users.end())
 		users.erase(userpos);
 }
