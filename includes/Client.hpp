@@ -11,7 +11,6 @@ private:
     bool        _authenticated;
     std::string _nickname;
     std::string _username;
-    std::string _realname;
     std::string _password;
 
 public:

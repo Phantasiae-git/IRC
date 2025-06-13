@@ -13,9 +13,27 @@ std::string Server::getPassword() const {
 	return _password;
 }
 
+const std::map<int, Client*> &Server::getClients() const 
+{
+    return this->clients;
+}
+
+void Server::broadCast(Client *client, std::string msg)
+{
+    int sender_fd = client->getFd();
+
+    for (size_t j = 0; j < pfds.size(); j++)
+    {   
+        int dest_fd = pfds[j].fd;
+
+        if (dest_fd != _listener_fd && dest_fd != sender_fd)
+        {
+            sendMessage(dest_fd, msg);
+        }
+    }
+}
 void Server::acceptNewClient()
 {
-	// novo cliente
 	sockaddr_in client_addr;
 	socklen_t cl_addr_len = sizeof client_addr;
 
@@ -50,7 +68,7 @@ void Server::handleClientData(int i)
 	else
 	{
 		_input_buffers[sender_fd].append(buf, nbytes);
-
+		std::cout << _input_buffers[sender_fd] << std::endl;
 		size_t pos;
 		while ((pos = _input_buffers[sender_fd].find("\n")) != std::string::npos) {
 			std::string msg = _input_buffers[sender_fd].substr(0, pos);
@@ -75,9 +93,6 @@ void Server::disconnectClient(int i)
 
 bool Server::start()
 {
-	signal(SIGINT, signalHandler);
-	signal(SIGQUIT, signalHandler);
-
 	_listener_fd = get_listen_sock(_port);
 	if (_listener_fd == -1)
 	{
@@ -91,43 +106,44 @@ bool Server::start()
 
 void Server::run()
 {
+    try
+    {
+        while (1)
+        {
+            int act_socks = poll(&pfds[0], pfds.size(), -1);
+			std::cout << act_socks << std::endl;
+            if (act_socks < 0)
+            {
+                std::cerr << "poll failed: " << errno << std::endl;
+                break;
+            }
 
-	try
-	{
-		while (1)
-		{
-			int act_socks = poll(&pfds[0], pfds.size(), -1);
-			if (act_socks < 0)
-			{
-				std::cerr << "poll failed: " << errno << std::endl;
-				break;
-			}
-
-			for (size_t i = 0; i < pfds.size(); i++)
-			{
-				if (pfds[i].revents & (POLLIN))
-				{
-					if (pfds[i].fd == _listener_fd)
-					{
-						acceptNewClient();
-					}
-					else
-					{
-						handleClientData(i);
-					}
-				}
-				else if (pfds[i].revents & POLLHUP)
-				{
-					disconnectClient(i);
-					--i;
-				}
-			}
-		}
-	}
-	catch (const std::exception &e)
-	{
-		while (!pfds.empty())
-			disconnectClient(0);
-		std::cerr << e.what() << '\n';
-	}
+            for (size_t i = 0; i < pfds.size(); i++)
+            {
+                
+                if (pfds[i].revents & (POLLIN))
+                {
+                    if (pfds[i].fd == _listener_fd)
+                    {
+                        acceptNewClient();
+                    }
+                    else
+                    {
+                        handleClientData(i);
+                    }
+                }
+                else if (pfds[i].revents & POLLHUP)
+                {
+                    disconnectClient(i);
+                    --i;
+                }
+            }
+        }
+    }
+    catch (const std::exception &e)
+    {
+        while (!pfds.empty())
+            disconnectClient(0);
+        std::cerr << e.what() << '\n';
+    }
 }

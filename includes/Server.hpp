@@ -9,6 +9,7 @@
 #include <sys/socket.h>
 #include "utils.hpp"
 #include "Client.hpp"
+#include "Channel.hpp"
 #include <csignal>
 
 class Server
@@ -18,6 +19,8 @@ private:
 	int						_port;
 	std::string				_password;
 	std::vector<pollfd>		pfds;
+	std::map<int, Client*>	clients;
+	std::vector<Channel>	channels;
 	std::map<int, std::string>	_input_buffers;
 	std::map<int, Client*>	clients;
 	
@@ -30,6 +33,8 @@ private:
 public:
 	Server(int port, std::string password);
 	~Server();
+	const std::map<int, Client*> &getClients() const;
+	void broadCast(Client *client, std::string msg);
 	
 	bool start();
 	void run();

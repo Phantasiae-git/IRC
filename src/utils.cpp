@@ -94,43 +94,6 @@ void	signalHandler(int signum)
 	(void)signum;
 }
 
-/*✅ Resumo prático:
-
-	O primeiro caractere do nickname deve ser:
-
-		Uma letra (A-Z, a-z) ou
-
-		Um caractere especial permitido: [ ] \ ^ { }`
-
-	Os caracteres seguintes (até um máximo total de 9) podem ser:
-
-		Letras (A-Z, a-z)
-
-		Dígitos (0-9)
-
-		Os mesmos caracteres especiais permitidos
-
-		O caractere - (hífen)
-*/
-
-bool	is_validNickName(const std::string &nickname)
-{
-	if (nickname.empty() || nickname.length() > 9)
-		return (false);
-
-	const std::string specialChars = "[]\\`^{}";
-
-	if (!isalpha(nickname[0]) && specialChars.find(nickname[0]) == std::string::npos)
-		return (false);
-
-	for (size_t i = 1; i < nickname.length(); ++i)
-	{
-		if (!isalnum(nickname[i]) && specialChars.find(nickname[i]) == std::string::npos && nickname[i] != '-')
-			return (false);
-	}
-	return (true);
-}
-
 void	sendMessage(int fd, std::string msg) {
     send(fd, msg.c_str(), msg.size(), 0);
 }
