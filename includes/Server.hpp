@@ -21,9 +21,7 @@ private:
 	std::vector<pollfd>		pfds;
 	std::map<int, Client*>	clients;
 	std::vector<Channel>	channels;
-	std::map<int, std::string>	_input_buffers;
-	std::map<int, Client*>	clients;
-	
+	std::map<int, std::string>	_input_buffers;	
 	
 	void acceptNewClient();
 	void handleClientData(int i);

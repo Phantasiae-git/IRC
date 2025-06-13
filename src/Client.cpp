@@ -17,10 +17,6 @@ const std::string &Client::getUsername() const {
 	return _username;
 }
 
-const std::string &Client::getRealname() const {
-	return _realname;
-}
-
 void Client::setNickname(const std::string &nickname) {
 	_nickname = nickname;
 }
