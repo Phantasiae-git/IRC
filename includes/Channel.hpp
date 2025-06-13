@@ -30,6 +30,8 @@ public:
 
 	void addUser(Client *user, std::string password);
 	void broadCast(Client *client, std::string msg);
+    std::string getPassword() const;
+    void setPassword(std::string pass);
 	std::string getName();
 	int isOperator(Client *client);
 };

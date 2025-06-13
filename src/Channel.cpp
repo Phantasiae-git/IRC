@@ -15,6 +15,13 @@ Channel::~Channel()
 	std::cout << "Channel destructor called" << std::endl;
 }
 
+std::string Channel::getPassword() const {
+	return password;
+}
+
+void Channel::setPassword(std::string pass) {
+	password = pass;
+}
 
 Channel &Channel::operator=(const Channel &other)
 {

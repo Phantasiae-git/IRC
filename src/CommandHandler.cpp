@@ -3,12 +3,7 @@
 // NICK: atualiza nickname do cliente
 // USER: armazena info do usuário
 // JOIN: adiciona cliente a canal (criar canal se não existir)
-// PART: remove cliente do canal
 // PRIVMSG: envia mensagem para o cliente ou canal alvo
-// PING: responder com PONG
-// QUIT: fecha conexão, remove cliente
-// LIST: listar canais disponíveis
-// NAMES: listar usuários num canal
 
 // por parte do operador:
 // KICK: remove um client do canal
