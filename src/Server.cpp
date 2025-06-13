@@ -1,4 +1,5 @@
 #include "../includes/Server.hpp"
+#include "../includes/CommandHandler.hpp"
 
 Server::Server(int port, std::string pswd)
     : _listener_fd(-1), _port(port), _password(pswd) {}
@@ -30,6 +31,7 @@ void Server::acceptNewClient()
 
 void Server::handleClientData(int i)
 {
+    CommandHandler cmdhandler;
     char buf[256];
     int nbytes = recv(pfds[i].fd, buf, sizeof buf, 0);
     int sender_fd = pfds[i].fd; 
@@ -50,19 +52,11 @@ void Server::handleClientData(int i)
         while ((pos = _input_buffers[sender_fd].find("\n")) != std::string::npos) {
             std::string msg = _input_buffers[sender_fd].substr(0, pos);
             _input_buffers[sender_fd].erase(0, pos + 2);
-		
-        for (size_t j = 0; j < pfds.size(); j++)
-        {
-            int dest_fd = pfds[j].fd;
-            if (dest_fd != _listener_fd && dest_fd != sender_fd)
-            {
-                if (send(dest_fd, msg.c_str(), msg.size(), 0) == -1)
-                {
-                    std::cerr << "send error: " << errno << std::endl;
-                }
-            }
+
+            std::map<int, Client*>::iterator it = clients.find(sender_fd);
+            Client* client = it->second;
+            cmdhandler.handle(*this, *client, msg);
         }
-		}
     }
 }
 void Server::disconnectClient(int i)

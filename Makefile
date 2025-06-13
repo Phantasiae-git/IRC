@@ -3,7 +3,8 @@ CFLAGS = -Wall -Wextra -Werror -std=c++98 #-fsanitize=address
 RM = rm -rf
 NAME = ircserv
 
-SRCS = main.cpp src/Server.cpp src/Client.cpp src/CommandHandler.cpp src/utils.cpp #src/commands/NickCommand.cpp src/commands/UserCommand.cpp
+SRCS = main.cpp src/Server.cpp src/Client.cpp src/CommandHandler.cpp src/utils.cpp \
+		src/commands/ACommand.cpp src/commands/NickCommand.cpp #src/commands/UserCommand.cpp
 	   
 
 OBJS = $(SRCS:.cpp=.o)

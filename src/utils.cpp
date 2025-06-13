@@ -130,3 +130,7 @@ bool	is_validNickName(const std::string &nickname)
 	}
 	return (true);
 }
+
+void	sendMessage(int fd, std::string msg) {
+    send(fd, msg.c_str(), msg.size(), 0);
+}
