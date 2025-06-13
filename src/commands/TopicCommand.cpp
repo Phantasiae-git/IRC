@@ -42,7 +42,7 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
         if(channel->getTopic().empty())
            sendMessage(client.getFd(), args[1] + " :No topic is set\n");
         else
-            sendMessage(client.getFd(), args[1] + " :" + channel->getTopic());
+            sendMessage(client.getFd(), args[1] + " :" + channel->getTopic() + '\n');
     }
     else if(args.size() == 3)
     {
