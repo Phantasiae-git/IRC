@@ -31,6 +31,8 @@ public:
 	Channel &operator=(const Channel &other);
 
 	void addUser(Client *user, std::string password);
+
+    void addToInvited(Client *user);
 	void broadCast(Client *client, std::string msg);
     std::string getPassword() const;
     void setPassword(std::string pass);

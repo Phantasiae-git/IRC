@@ -27,8 +27,8 @@ CommandHandler::CommandHandler() {
     // _commands["QUIT"] = new QuitCommand();
     // _commands["LIST"] = new ListCommand();
     // _commands["NAMES"] = new NamesCommand();
-    // _commands["KICK"] = new KickCommand();
-    // _commands["INVITE"] = new InviteCommand();
+    _commands["KICK"] = new KickCommand();
+    _commands["INVITE"] = new InviteCommand();
     _commands["TOPIC"] = new TopicCommand();
     // _commands["MODE"] = new ModeCommand();
 }
