@@ -25,26 +25,19 @@ void KickCommand::execute(Server &server, Client &client, const std::vector<std:
 		return;
 	}
 	std::map<std::string, Channel *> channels;
-	channels = client.getChannels();
-	Channel channel;
-	int not_on_ch=1;
-	if(channels.find(client.getUsername()) == channels.end())
+	channels=client.getChannels();
+	std::map<std::string, Channel *>::iterator it=channels.find(client.getUsername());
+	if(it==channels.end())
 	{
 		std::cout << "(442) NOTONCHANNEL" << std::endl;
 		return;
 	}
-	if(!channel.isOperator(&client))
+	Channel *channel =it->second;
+	if(!channel->isOperator(&client))
 	{
 		std::cout << "(482) CHANOPRIVSNEEDED" << std::endl;
 		return;
 	}
 	
-	std::vector<Client *> members;
-	members=channel.getUsers();
-	
-	for(std::vector<Client *>::iterator it= members.begin(); it!=members.end(); it++)
-	{
-		if((*it)->getUsername()==args[1])
-			channel.removeUser(*it);
-	}
+	channel->removeUser(args[2]);
 }
