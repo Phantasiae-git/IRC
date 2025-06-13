@@ -7,7 +7,6 @@ UserCommand::~UserCommand() {}
 void UserCommand::execute(Server &server, Client &client, const std::vector<std::string> &args) {
     
     (void)server;
-
     if(client.getNickname().empty())
     {
         sendMessage(client.getFd(), "You must set a NickName before use USER\n");
@@ -33,4 +32,9 @@ void UserCommand::execute(Server &server, Client &client, const std::vector<std:
     client.setUsername(args[1]);
     client.setRegistered(true);
     sendMessage(client.getFd(), client.getNickname() + " Set a new user " + args[1] + "\n");
+
+    if(client.getPassword() == server.getPassword())
+    {
+       client.setAuthentication(true);
+    }   
 }

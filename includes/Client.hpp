@@ -14,6 +14,7 @@ private:
     bool        _registered;
     bool        _authenticated;
     std::string _nickname;
+    std::string _username;
 
     std::string _password;
 	  std::vector<Channel *> channels;

@@ -21,7 +21,9 @@ bool NickCommand::is_duplicateNick(const Server &server, const std::string &nick
 
 void NickCommand::execute(Server &server, Client &client, const std::vector<std::string> &args) {
 
-    if (client.getPassword().empty()) {
+    if (client.getPassword().empty()) 
+    {
+        sendMessage(client.getFd(), "You must enter the password\n");
         return;
     }
     if(args.size() != 2 )
@@ -49,7 +51,7 @@ void NickCommand::execute(Server &server, Client &client, const std::vector<std:
 			std::vector<Channel *> channels=client.getChannels();
 			for(std::vector<Channel *>::iterator it= channels.begin(); it!=channels.end(); it++)
 				(*it)->broadCast(&client, client.getNickname() + ": changed his nickname to " + args[1]);
-        client.setNickname(args[1]);
 		}
+        client.setNickname(args[1]);
     }
 }
