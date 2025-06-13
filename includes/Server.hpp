@@ -19,6 +19,8 @@ private:
 	std::string				_password;
 	std::vector<pollfd>		pfds;
 	std::map<int, Client*>	clients;
+	std::map<int, std::string>	_input_buffers;
+
 
 	void acceptNewClient();
 	void handleClientData(int i);
