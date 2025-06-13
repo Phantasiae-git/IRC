@@ -14,6 +14,8 @@
 #include "commands/JoinCommand.hpp"
 #include "commands/PrivmsgCommand.hpp"
 #include "commands/TopicCommand.hpp"
+#include "commands/InviteCommand.hpp"
+#include "commands/KickCommand.hpp"
 
 class CommandHandler
 {

@@ -68,6 +68,12 @@ void Channel::addUser(Client *user, std::string pword)
 	user->addChannel(name, this);
 }
 
+void Channel::addToInvited(Client *user)
+{
+	if (invited.find(user->getUsername())!=invited.end())
+   		return;
+	invited.insert(std::make_pair(user->getUsername(), user));;
+}
 
 void Channel::broadCast(Client *client, std::string msg)
 {
