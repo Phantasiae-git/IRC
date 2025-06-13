@@ -19,11 +19,16 @@ private:
 	std::string				_password;
 	std::vector<pollfd>		pfds;
 	std::map<int, Client*>	clients;
+	//std::string _input_buffer;
+
 
 	void acceptNewClient();
 	void handleClientData(int i);
 	void disconnectClient(int i);
 	void SignalHandler(int signum);
+	//std::string &getInputBuffer();
+    //void appendToBuffer(const std::string data)
+    //void clearBufferUpTo(size_t pos)
 
 public:
 	Server(int port, std::string password);
@@ -31,6 +36,7 @@ public:
 	
 	bool start();
 	void run();
+	
 };
 
 #endif

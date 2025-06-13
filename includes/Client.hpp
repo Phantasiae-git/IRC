@@ -11,7 +11,6 @@ private:
     std::string _nickname;
     std::string _username;
     std::string _realname;
-    //std::string _input_buffer; acho que é necessário guardar os dados recebidos para o caso de estarem incompletos ou appended a várias mensagens
 
 public:
     Client(int fd);
@@ -28,9 +27,7 @@ public:
     void setRegistered(bool registered);
     bool isRegistered() const;
 
-    //std::string &getInputBuffer();
-    //void appendToBuffer(const std::string data)
-    //void clearBufferUpTo(size_t pos)
+    
 };
 
 #endif
