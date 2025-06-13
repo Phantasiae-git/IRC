@@ -7,9 +7,11 @@ class Client
 {
 private:
     int         _fd;
-    bool        _registered; // o cliente está ou não registado
+    bool        _registered;
+    bool        _authenticated;
     std::string _nickname;
     std::string _username;
+    std::string _password;
 
 public:
     Client(int fd);
@@ -22,11 +24,13 @@ public:
     const std::string &getRealname() const;
     void setNickname(const std::string &nickname);
     void setUsername(const std::string &username);
-    void setRealname(const std::string &realname);
+    void setPassword(const std::string &password);
     void setRegistered(bool registered);
     bool isRegistered() const;
+    void setAuthentication(bool auth);
+    bool isAthenticated() const;
+    std::string getPassword();
 
-    
 };
 
 #endif

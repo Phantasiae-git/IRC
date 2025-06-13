@@ -1,7 +1,7 @@
 #include "../includes/Client.hpp"
 
 Client::Client(int fd)
-: _fd(fd) {}
+: _fd(fd), _registered(false), _authenticated(false) {}
 
 Client::~Client() {}
 
@@ -29,8 +29,12 @@ void Client::setUsername(const std::string &username) {
 	_username = username;
 }
 
-void Client::setRealname(const std::string &realname) {
-	_realname = realname;
+void Client::setPassword(const std::string &password) {
+	_password = password;
+}
+
+std::string Client::getPassword() {
+	return _password;
 }
 
 void Client::setRegistered(bool registered) {
@@ -41,3 +45,10 @@ bool Client::isRegistered() const {
 	return _registered;
 }
 
+void Client::setAuthentication(bool auth) {
+	_authenticated = auth;
+}
+
+bool Client::isAthenticated() const {
+	return _authenticated;
+}
