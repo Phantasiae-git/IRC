@@ -7,6 +7,8 @@
 #include <iostream>
 #include <algorithm>
 
+class Client;
+
 class Channel
 {
 private:
@@ -24,7 +26,7 @@ public:
     ~Channel();
 
 	void addUser(Client *user, std::string password);
-
+	void broadCast(Client *client, std::string msg);
 };
 
 #endif // Channel_HPP

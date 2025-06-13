@@ -48,3 +48,13 @@ void Client::setAuthentication(bool auth) {
 bool Client::isAthenticated() const {
 	return _authenticated;
 }
+
+void Client::addChannel(Channel *channel)
+{
+	channels.push_back(channel);
+}
+
+std::vector<Channel *> Client::getChannels()
+{
+	return channels;
+}

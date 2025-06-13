@@ -1,4 +1,5 @@
 #include "../includes/Channel.hpp"
+#include "../includes/utils.hpp"
 
 Channel::Channel(const std::string &name, Client *creator) : name(name)
 {
@@ -6,6 +7,7 @@ Channel::Channel(const std::string &name, Client *creator) : name(name)
 	operators.push_back(creator);
 	invonly=0;
 	pass=0;
+	creator->addChannel(this);
 }
 
 Channel::~Channel()
@@ -23,4 +25,21 @@ void Channel::addUser(Client *user, std::string pword)//if no password send empt
 	if(pass && pword!=password)
 		return;
 	users.push_back(user);
+	user->addChannel(this);
+}
+
+
+void Channel::broadCast(Client *client, std::string msg)
+{
+    int sender_fd = client->getFd();
+
+    for (size_t j = 0; j < users.size(); j++)
+    {   
+        int dest_fd = users[j]->getFd();
+
+        if (dest_fd != sender_fd)
+        {
+            sendMessage(dest_fd, msg);
+        }
+    }
 }
