@@ -23,7 +23,7 @@ public:
     Channel(const std::string &name, Client *creator);
     ~Channel();
 
-	void addUser(Client *user, std::string password));
+	void addUser(Client *user, std::string password);
 
 };
 
