@@ -21,5 +21,6 @@ std::vector<std::string>    split(const std::string &line);
 std::string                 toUpper(const std::string& input);
 void signalHandler(int signum);
 bool	is_validNickName(const std::string &nickname);
+void	sendMessage(int fd, std::string msg);
 
 #endif

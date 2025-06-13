@@ -8,8 +8,10 @@
 class ACommand
 {
 public:
-    virtual void execute(Server &server, Client &client, const std::vector<std::string> &args) = 0;
+    ACommand();
     virtual ~ACommand();
+
+    virtual void execute(Server &server, Client &client, const std::vector<std::string> &args) = 0;
 };
 
 #endif
