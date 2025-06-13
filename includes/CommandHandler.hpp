@@ -11,6 +11,7 @@
 #include "commands/NickCommand.hpp"
 #include "commands/UserCommand.hpp"
 #include "commands/PassCommand.hpp"
+#include "commands/JoinCommand.hpp"
 
 class CommandHandler
 {

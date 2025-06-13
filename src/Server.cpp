@@ -32,6 +32,7 @@ void Server::broadCast(Client *client, std::string msg)
         }
     }
 }
+
 void Server::acceptNewClient()
 {
 	sockaddr_in client_addr;
@@ -68,7 +69,6 @@ void Server::handleClientData(int i)
 	else
 	{
 		_input_buffers[sender_fd].append(buf, nbytes);
-		std::cout << _input_buffers[sender_fd] << std::endl;
 		size_t pos;
 		while ((pos = _input_buffers[sender_fd].find("\n")) != std::string::npos) {
 			std::string msg = _input_buffers[sender_fd].substr(0, pos);
@@ -111,8 +111,7 @@ void Server::run()
         while (1)
         {
             int act_socks = poll(&pfds[0], pfds.size(), -1);
-			std::cout << act_socks << std::endl;
-            if (act_socks < 0)
+			if (act_socks < 0)
             {
                 std::cerr << "poll failed: " << errno << std::endl;
                 break;

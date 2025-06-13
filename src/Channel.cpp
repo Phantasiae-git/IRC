@@ -14,7 +14,7 @@ Channel::~Channel()
 }
 
 
-void Channel::addUser(Client *user, std::string pword)//if no password send empty
+void Channel::addUser(Client *user, std::string pword)
 {
 	if (std::find(users.begin(), users.end(), user) != users.end())
    		return;

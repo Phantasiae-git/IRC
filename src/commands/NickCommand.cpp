@@ -40,7 +40,9 @@ bool is_duplicateNick(const Server &server, const std::string &nick)
 
 void NickCommand::execute(Server &server, Client &client, const std::vector<std::string> &args) {
 
-    
+    if (client.getPassword().empty()) {
+        return;
+    }
     if(args.size() < 2)
     {
         sendMessage(client.getFd(), "(431) ERR_NONICKNAMEGIVEN\n");

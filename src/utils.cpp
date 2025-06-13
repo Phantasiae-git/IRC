@@ -89,7 +89,27 @@ int	get_listen_sock(int port)
 	return (listener_fd);
 }
 
+void sendMessage(int fd, const std::string msg) {
+	std::ostringstream oss;
+	oss << "\033[32m"
+		<< msg
+		<< "\033[0m";
 
-void	sendMessage(int fd, std::string msg) {
-    send(fd, msg.c_str(), msg.size(), 0);
+	std::string newMsg = oss.str();
+	send(fd, newMsg.c_str(), newMsg.size(), 0);
 }
+
+
+void sendError(int fd, int errorn, std::string nickname, std::string channelname, std::string msg) {
+	std::ostringstream oss;
+	oss << "\033[31m"
+		<< ":" << nickname << " " 
+		<< errorn << " "
+		<< channelname << " :"
+		<< msg
+		<< "\033[0m";
+
+	std::string newMsg = oss.str() + "\r\n";
+	send(fd, newMsg.c_str(), newMsg.size(), 0);
+}
+
