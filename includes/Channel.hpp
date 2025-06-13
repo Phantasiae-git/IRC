@@ -36,6 +36,8 @@ public:
 	int isOperator(Client *client);
 	std::vector<Client *> getUsers();
 	void removeUser(Client *user);
+    std::string getTopic() const;
+    void setTopic(std::string topic);
 };
 
 #endif // Channel_HPP

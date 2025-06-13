@@ -23,23 +23,23 @@ void NickCommand::execute(Server &server, Client &client, const std::vector<std:
 
     if (client.getPassword().empty()) 
     {
-        sendMessage(client.getFd(), "You must enter the password\n");
+        std::cout << "You must enter the password\n" << std::endl;
         return;
     }
     if(args.size() != 2 )
     {
-        sendMessage(client.getFd(), "(431) ERR_NONICKNAMEGIVEN\n");
+        std::cout << "(431) ERR_NONICKNAMEGIVEN\n" << std::endl;
         return;
     }
 
     if(!is_validNickOrUser(args[1]))
     {
-        sendMessage(client.getFd(), "(432) ERR_ERRONEUSNICKNAME\n");
+        std::cout << "(432) ERR_ERRONEUSNICKNAME\n" << std::endl;
         return;
     }
     else if(is_duplicateNick(server, args[1]))
     {
-        sendMessage(client.getFd(), "(433) ERR_NICKNAMEINUSE\n");
+        std::cout << "(433) ERR_NICKNAMEINUSE\n" << std::endl;
         return;
     }
     else
