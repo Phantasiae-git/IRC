@@ -9,7 +9,7 @@ Channel::Channel(const std::string &name, Client *creator) : name(name)
 	invonly=0;
 	pass=0;
 	t=0;
-	creator->addChannel(this);
+	creator->addChannel(name, this);
 }
 
 Channel::~Channel()
