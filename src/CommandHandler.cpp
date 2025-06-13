@@ -43,6 +43,7 @@ CommandHandler::~CommandHandler() {
     }
 }
 
+// PASS: "OLA"
 void CommandHandler::handle(Server &server, Client &client, const std::string &line) {
     std::vector<std::string> args = split(line);
     if (args.empty()) {

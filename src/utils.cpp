@@ -1,87 +1,132 @@
 #include "../includes/utils.hpp"
 
-std::string toUpper(const std::string& input) {
-    std::string result = input;
-    for (std::string::size_type i = 0; i < result.size(); ++i) {
-        result[i] = std::toupper(static_cast<unsigned char>(result[i]));
-    }
-    return result;
+std::string toUpper(const std::string &input)
+{
+	std::string result = input;
+	for (std::string::size_type i = 0; i < result.size(); ++i)
+	{
+		result[i] = std::toupper(static_cast<unsigned char>(result[i]));
+	}
+	return (result);
 }
 
-std::vector<std::string> split(const std::string &line) {
-
+std::vector<std::string> split(const std::string &line)
+{
 	std::vector<std::string> result;
 	std::istringstream iss(line);
 	std::string word;
-
-	while (iss >> word) {
-		if (word[0] == ':') {
+	while (iss >> word)
+	{
+		if (word[0] == ':')
+		{
 			std::string rest;
 			std::getline(iss, rest);
 			result.push_back(word + rest);
-			break;
+			break ;
 		}
 		result.push_back(word);
 	}
-	return result;
+	return (result);
 }
 
-bool isValidPort(const char* portStr, int& portOut) {
-
-    long port = atol(portStr);
-    
-    if (port < 1024 || port > 65535) {
-        return false;
-    }
-    portOut = static_cast<int>(port);
-    return true;
-}
-
-void *get_in_addr(sockaddr *sa)
+bool	isValidPort(const char *portStr, int &portOut)
 {
-	return &(((sockaddr_in*)sa)->sin_addr);
-}
+	long	port;
 
-int get_listen_sock(int port)
-{
-	int listener_fd;
-	int yes = 1;
-
-	sockaddr_in server_addr;
-
-	listener_fd=socket(AF_INET, SOCK_STREAM, 0);//not sure se precisamos do getaddrinfo e checkar todos os nodes msm sendo só ipv4? :/
-	if(listener_fd < 0) {
-		std::cerr << "socket: " << errno << std::endl;
-		return -1;
+	port = atol(portStr);
+	if (port < 1024 || port > 65535)
+	{
+		return (false);
 	}
-	if(setsockopt(listener_fd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) < 0) {
+	portOut = static_cast<int>(port);
+	return (true);
+}
+
+void	*get_in_addr(sockaddr *sa)
+{
+	return (&(((sockaddr_in *)sa)->sin_addr));
+}
+
+int	get_listen_sock(int port)
+{
+	int			listener_fd;
+	int			yes;
+	sockaddr_in	server_addr;
+
+	yes = 1;
+	listener_fd = socket(AF_INET, SOCK_STREAM, 0);
+		// not sure se precisamos do getaddrinfo e checkar todos os nodes msm sendo só ipv4? :/
+	if (listener_fd < 0)
+	{
+		std::cerr << "socket: " << errno << std::endl;
+		return (-1);
+	}
+	if (setsockopt(listener_fd, SOL_SOCKET, SO_REUSEADDR, &yes,
+			sizeof(int)) < 0)
+	{
 		std::cerr << "sockopt: " << errno << std::endl;
-		return -1;
+		return (-1);
 	}
 	memset(&server_addr, 0, sizeof server_addr);
-	server_addr.sin_family=AF_INET;
-	server_addr.sin_port=htons(port);
-	server_addr.sin_addr.s_addr=INADDR_ANY;
-
-	if(fcntl(listener_fd, F_SETFL, O_NONBLOCK)!=0)
-    {
-        std::cerr << "setting non-block error: "<< errno << std::endl;
-        return(1);
-    }
-
-	if(bind(listener_fd, (sockaddr *)&server_addr, sizeof server_addr) < 0) {
+	server_addr.sin_family = AF_INET;
+	server_addr.sin_port = htons(port);
+	server_addr.sin_addr.s_addr = INADDR_ANY;
+	if (fcntl(listener_fd, F_SETFL, O_NONBLOCK) != 0)
+	{
+		std::cerr << "setting non-block error: " << errno << std::endl;
+		return (1);
+	}
+	if (bind(listener_fd, (sockaddr *)&server_addr, sizeof server_addr) < 0)
+	{
 		std::cerr << "bind: " << errno << std::endl;
-		return -1;
+		return (-1);
 	}
-
-	if(listen(listener_fd, 20) < 0) {
+	if (listen(listener_fd, 20) < 0)
+	{
 		std::cerr << "listen: " << errno << std::endl;
-		return -1;
+		return (-1);
 	}
-
-	return listener_fd;
+	return (listener_fd);
 }
 
-void signalHandler(int signum) {
-    (void)signum;
+void	signalHandler(int signum)
+{
+	(void)signum;
+}
+
+/*✅ Resumo prático:
+
+	O primeiro caractere do nickname deve ser:
+
+		Uma letra (A-Z, a-z) ou
+
+		Um caractere especial permitido: [ ] \ ^ { }`
+
+	Os caracteres seguintes (até um máximo total de 9) podem ser:
+
+		Letras (A-Z, a-z)
+
+		Dígitos (0-9)
+
+		Os mesmos caracteres especiais permitidos
+
+		O caractere - (hífen)
+*/
+
+bool	is_validNickName(const std::string &nickname)
+{
+	if (nickname.empty() || nickname.length() > 9)
+		return (false);
+
+	const std::string specialChars = "[]\\`^{}";
+
+	if (!isalpha(nickname[0]) && specialChars.find(nickname[0]) == std::string::npos)
+		return (false);
+
+	for (size_t i = 1; i < nickname.length(); ++i)
+	{
+		if (!isalnum(nickname[i]) && specialChars.find(nickname[i]) == std::string::npos && nickname[i] != '-')
+			return (false);
+	}
+	return (true);
 }

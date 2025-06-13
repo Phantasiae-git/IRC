@@ -26,6 +26,9 @@ private:
 	void handleClientData(int i);
 	void disconnectClient(int i);
 	void SignalHandler(int signum);
+	//std::string &getInputBuffer();
+    //void appendToBuffer(const std::string data)
+    //void clearBufferUpTo(size_t pos)
 
 public:
 	Server(int port, std::string password);
@@ -33,6 +36,7 @@ public:
 	
 	bool start();
 	void run();
+	
 };
 
 #endif

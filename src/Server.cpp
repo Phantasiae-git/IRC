@@ -14,22 +14,25 @@ void Server::acceptNewClient()
     sockaddr_in client_addr;
     socklen_t cl_addr_len = sizeof client_addr;
 
-    int clientfd = accept(_listener_fd, (sockaddr *)&client_addr, &cl_addr_len);
-    if (clientfd < 0)
+    Client newclient(accept(_listener_fd, (sockaddr *)&client_addr, &cl_addr_len));
+    
+    if (newclient.getFd() < 0)
     {
         std::cerr << "accept failed: " << errno << std::endl;
         return;
     }
-    pfds.push_back((pollfd){clientfd, POLLIN, 0});
-    std::cout << "yay! new connection from " << inet_ntoa(client_addr.sin_addr) << " on socket " << clientfd << std::endl;
-    // adicionar cliente a um map
+    pfds.push_back((pollfd){newclient.getFd(), POLLIN, 0});
+    std::cout << "yay! new connection from " << inet_ntoa(client_addr.sin_addr) << " on socket " << newclient.getFd() << std::endl;
+
+    clients.insert(std::make_pair(newclient.getFd(), &newclient)); // adicionar cliente a um map
+    
 }
 
 void Server::handleClientData(int i)
 {
     char buf[256];
     int nbytes = recv(pfds[i].fd, buf, sizeof buf, 0);
-    int sender_fd = pfds[i].fd;
+    int sender_fd = pfds[i].fd; 
 
     if (nbytes < 1)
     {
