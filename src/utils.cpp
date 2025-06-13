@@ -97,4 +97,3 @@ void	signalHandler(int signum)
 void	sendMessage(int fd, std::string msg) {
     send(fd, msg.c_str(), msg.size(), 0);
 }
-

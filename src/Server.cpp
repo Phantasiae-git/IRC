@@ -57,6 +57,7 @@ void Server::handleClientData(int i)
     int nbytes = recv(pfds[i].fd, buf, sizeof buf, 0);
     int sender_fd = pfds[i].fd; 
 
+	std::cout << nbytes << std::endl;
     if (nbytes < 1)
     {
         if (nbytes < 0)
@@ -68,7 +69,7 @@ void Server::handleClientData(int i)
     else
     {
 		_input_buffers[sender_fd].append(buf, nbytes);
-
+		std::cout << _input_buffers[sender_fd] << std::endl;
 		size_t pos;
         while ((pos = _input_buffers[sender_fd].find("\n")) != std::string::npos) {
             std::string msg = _input_buffers[sender_fd].substr(0, pos);
@@ -84,14 +85,13 @@ void Server::handleClientData(int i)
 void Server::disconnectClient(int i)
 {
     std::cout << "client disconnected on socket " << pfds[i].fd << std::endl;
+	_input_buffers.erase(pfds[i].fd);
     close(pfds[i].fd);
     pfds.erase(pfds.begin() + i);
 }
 
 bool Server::start()
 {
-    signal(SIGINT, signalHandler);
-    signal(SIGQUIT, signalHandler);
 
     _listener_fd = get_listen_sock(_port);
     if (_listener_fd == -1)
@@ -112,6 +112,7 @@ void Server::run()
         while (1)
         {
             int act_socks = poll(&pfds[0], pfds.size(), -1);
+			std::cout << act_socks << std::endl;
             if (act_socks < 0)
             {
                 std::cerr << "poll failed: " << errno << std::endl;

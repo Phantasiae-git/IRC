@@ -10,7 +10,6 @@ private:
     bool        _registered; // o cliente está ou não registado
     std::string _nickname;
     std::string _username;
-    std::string _realname;
 
 public:
     Client(int fd);
