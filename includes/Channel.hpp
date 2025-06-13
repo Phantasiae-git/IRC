@@ -20,6 +20,7 @@ private:
     std::vector<Client *> invited;
     std::string password;
 	std::vector<Client *> operators;
+	bool t;//1 only ops can, 0 anyone can
 
 public:
 	Channel();

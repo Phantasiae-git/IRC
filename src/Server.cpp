@@ -18,7 +18,6 @@ const std::map<int, Client*> &Server::getClients() const
     return this->clients;
 }
 
-
 void Server::acceptNewClient()
 {
 	sockaddr_in client_addr;

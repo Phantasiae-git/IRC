@@ -1,5 +1,6 @@
 #include "../includes/Channel.hpp"
 #include "../includes/utils.hpp"
+#include "../includes/Server.hpp"
 
 Channel::Channel(const std::string &name, Client *creator) : name(name)
 {
@@ -7,6 +8,7 @@ Channel::Channel(const std::string &name, Client *creator) : name(name)
 	operators.push_back(creator);
 	invonly=0;
 	pass=0;
+	t=0;
 	creator->addChannel(this);
 }
 
@@ -33,6 +35,7 @@ Channel &Channel::operator=(const Channel &other)
 	this->pass=other.pass;
 	this->password=other.password;
 	this->operators=other.operators;
+	this->t=other.t;
 	return *this;
 }
 

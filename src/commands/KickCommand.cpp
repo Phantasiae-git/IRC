@@ -19,7 +19,11 @@ void KickCommand::execute(Server &server, Client &client, const std::vector<std:
 		std::cout << "(476) ERR_BADCHANMASK" << std::endl;
 		return;
 	}
-	//RUN THROUGH SERVER CHANNELS TO CHECK FOR NOSUCHCHANNEL ERROR
+	if(server.channels.find(args[1])==server.channels.end())
+	{
+		std::cout << "(403) ERR_NOSUCHCHANNEL" << std::endl;
+		return;
+	}
 	std::vector<Channel *> channels;
 	channels=client.getChannels();
 	Channel channel;
