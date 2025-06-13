@@ -20,6 +20,7 @@ private:
     std::vector<Client *> invited;
     std::string password;
 	std::vector<Client *> operators;
+	bool t;//1 only ops can, 0 anyone can
 
 public:
 	Channel();
@@ -34,6 +35,8 @@ public:
     void setPassword(std::string pass);
 	std::string getName();
 	int isOperator(Client *client);
+	std::vector<Client *> getUsers();
+	void removeUser(Client *user);
 };
 
 #endif // Channel_HPP

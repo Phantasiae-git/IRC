@@ -1,5 +1,6 @@
 #include "../includes/Channel.hpp"
 #include "../includes/utils.hpp"
+#include "../includes/Server.hpp"
 
 Channel::Channel(const std::string &name, Client *creator) : name(name)
 {
@@ -7,7 +8,8 @@ Channel::Channel(const std::string &name, Client *creator) : name(name)
 	operators.push_back(creator);
 	invonly=0;
 	pass=0;
-	creator->addChannel(name, this);
+	t=0;
+	creator->addChannel(this);
 }
 
 Channel::~Channel()
@@ -25,9 +27,6 @@ void Channel::setPassword(std::string pass) {
 
 Channel &Channel::operator=(const Channel &other)
 {
-	users.clear();
-	operators.clear();
-	invited.clear();
 	this->users=other.users;
 	this->name=other.name;
 	this->topic=other.topic;
@@ -36,6 +35,7 @@ Channel &Channel::operator=(const Channel &other)
 	this->pass=other.pass;
 	this->password=other.password;
 	this->operators=other.operators;
+	this->t=other.t;
 	return *this;
 }
 
@@ -79,4 +79,16 @@ int Channel::isOperator(Client *client)
 		return 1;
 	else
 		return 0;
+}
+
+std::vector<Client *> Channel::getUsers()
+{
+	return users;
+}
+
+void Channel::removeUser(Client *user)
+{
+	std::vector<Client *>::iterator userpos=std::find(users.begin(),users.end(), user);
+	if(userpos!=users.end())
+		users.erase(userpos);
 }

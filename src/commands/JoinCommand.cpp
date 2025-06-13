@@ -32,6 +32,7 @@ void JoinCommand::execute(Server &server, Client &client, const std::vector<std:
 	}
 	else {
 		Channel* newChannel = new Channel(args[1], &client);
+		server.channels.insert(std::make_pair(args[1], newChannel));
 		if (args.size() >= 3 && !args[2].empty()) {
 			newChannel->setPassword(args[2]);
 		}
