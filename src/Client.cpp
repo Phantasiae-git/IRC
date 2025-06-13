@@ -25,6 +25,7 @@ void Client::setUsername(const std::string &username) {
 	_username = username;
 }
 
+
 void Client::setPassword(const std::string &password) {
 	_password = password;
 }

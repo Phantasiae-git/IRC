@@ -7,6 +7,8 @@ class UserCommand : public ACommand
 {
 public:
     void execute(Server &server, Client &client, const std::vector<std::string> &args);
+    UserCommand();
+    ~UserCommand();
 };
 
 #endif

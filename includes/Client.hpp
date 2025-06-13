@@ -14,9 +14,10 @@ private:
     bool        _registered;
     bool        _authenticated;
     std::string _nickname;
-    std::string _username;
+
     std::string _password;
-	std::vector<Channel *> channels;
+	  std::vector<Channel *> channels;
+
 
 public:
     Client(int fd);
@@ -29,7 +30,9 @@ public:
     const std::string &getRealname() const;
     void setNickname(const std::string &nickname);
     void setUsername(const std::string &username);
+
     void setPassword(const std::string &password);
+
     void setRegistered(bool registered);
     bool isRegistered() const;
     void setAuthentication(bool auth);

@@ -24,7 +24,7 @@
 CommandHandler::CommandHandler() {
     _commands["PASS"] = new PassCommand();
     _commands["NICK"] = new NickCommand();
-    //_commands["USER"] = new UserCommand();
+    _commands["USER"] = new UserCommand();
     _commands["JOIN"] = new JoinCommand();
     // _commands["PART"] = new PartCommand();
     // _commands["PRIVMSG"] = new PrivmsgCommand();
