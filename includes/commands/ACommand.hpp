@@ -3,6 +3,7 @@
 
 #include "../Server.hpp"
 #include "../Client.hpp"
+#include "../Channel.hpp"
 #include <vector>
 
 class ACommand

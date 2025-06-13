@@ -18,20 +18,6 @@ const std::map<int, Client*> &Server::getClients() const
     return this->clients;
 }
 
-void Server::broadCast(Client *client, std::string msg)
-{
-    int sender_fd = client->getFd();
-
-    for (size_t j = 0; j < pfds.size(); j++)
-    {   
-        int dest_fd = pfds[j].fd;
-
-        if (dest_fd != _listener_fd && dest_fd != sender_fd)
-        {
-            sendMessage(dest_fd, msg);
-        }
-    }
-}
 
 void Server::acceptNewClient()
 {

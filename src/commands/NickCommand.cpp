@@ -64,7 +64,11 @@ void NickCommand::execute(Server &server, Client &client, const std::vector<std:
         if(client.getNickname().empty())
             sendMessage(client.getFd(), "Introducing new nick " + args[1] + "\n");
         else
-            server.broadCast(&client, client.getNickname() + ": changed his nickname to " + args[1]);
+        {
+			std::vector<Channel *> channels=client.getChannels();
+			for(std::vector<Channel *>::iterator it= channels.begin(); it!=channels.end(); it++)
+				(*it)->broadCast(&client, client.getNickname() + ": changed his nickname to " + args[1]);
         client.setNickname(args[1]);
+		}
     }
 }

@@ -32,7 +32,6 @@ public:
 	Server(int port, std::string password);
 	~Server();
 	const std::map<int, Client*> &getClients() const;
-	void broadCast(Client *client, std::string msg);
 	
 	bool start();
 	void run();

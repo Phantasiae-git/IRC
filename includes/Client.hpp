@@ -2,6 +2,10 @@
 #define CLIENT_HPP
 
 #include <string>
+#include "Channel.hpp"
+#include <vector>
+
+class Channel;
 
 class Client
 {
@@ -12,6 +16,7 @@ private:
     std::string _nickname;
     std::string _username;
     std::string _password;
+	std::vector<Channel *> channels;
 
 public:
     Client(int fd);
@@ -29,6 +34,10 @@ public:
     bool isRegistered() const;
     void setAuthentication(bool auth);
     bool isAthenticated() const;
+
+	void addChannel(Channel *channel);
+	std::vector<Channel *> getChannels();
+	
     std::string getPassword();
 
 };
