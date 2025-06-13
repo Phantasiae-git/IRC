@@ -19,7 +19,7 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
 	}
     if(args[1][0]!='#')
 	{
-		std::cout << "(476) ERR_BADCHANMASK" << std::endl;
+		sendError(client.getFd(), 476, client.getNickname(), " ", "Bad channel mask\n");
 		return;
 	}
     std::map<std::string, Channel *> channels;
@@ -27,13 +27,13 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
 	std::map<std::string, Channel *>::iterator it=channels.find(args[1]);
 	if(it==channels.end())
 	{
-		std::cout << "(442) NOTONCHANNEL" << std::endl;
+		sendError(client.getFd(), 442, client.getNickname(), " ", "You're not on the channel\n");
 		return;
 	}
 	Channel *channel =it->second;
 	if(!channel->isOperator(&client) && channel->getT() == true)
 	{
-		std::cout << "(482) CHANOPRIVSNEEDED" << std::endl;
+		sendError(client.getFd(), 482, client.getNickname(), " ", "You're not a channel operator\n");
 		return;
 	}
 

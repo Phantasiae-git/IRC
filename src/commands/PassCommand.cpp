@@ -7,11 +7,11 @@ void PassCommand::execute(Server &server, Client &client, const std::vector<std:
 
 	(void)server;
 	if (args[1].empty()) {
-		sendMessage(client.getFd(), "(461) ERR_NEEDMOREPARAMS");
+		sendError(client.getFd(), 461, client.getNickname(), " ", "Needs more parameters\n");
 		return ;
 	}
 	else if (client.isRegistered()) {
-		sendMessage(client.getFd(), "(462) ERR_ALREADYREGISTRED");
+		sendError(client.getFd(), 462, client.getNickname(), " ", "You're already registered!\n");
 		return ;
 	}
 	else {

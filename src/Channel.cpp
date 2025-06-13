@@ -16,7 +16,6 @@ Channel::Channel(const std::string &name, Client *creator) : name(name)
 
 Channel::~Channel()
 {
-	std::cout << "Channel destructor called" << std::endl;
 }
 
 bool Channel::getT() const {

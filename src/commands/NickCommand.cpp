@@ -28,18 +28,18 @@ void NickCommand::execute(Server &server, Client &client, const std::vector<std:
     }
     if(args.size() != 2 )
     {
-        std::cout << "(431) ERR_NONICKNAMEGIVEN\n" << std::endl;
+		sendError(client.getFd(), 431, client.getNickname(), " ", "You didn't give a nickname\n");
         return;
     }
 
     if(!is_validNickOrUser(args[1]))
     {
-        std::cout << "(432) ERR_ERRONEUSNICKNAME\n" << std::endl;
+		sendError(client.getFd(), 432, client.getNickname(), " ", "Not a valid nickname\n");
         return;
     }
     else if(is_duplicateNick(server, args[1]))
     {
-        std::cout << "(433) ERR_NICKNAMEINUSE\n" << std::endl;
+		sendError(client.getFd(), 433, client.getNickname(), " ", "Nickname is already in use\n");
         return;
     }
     else

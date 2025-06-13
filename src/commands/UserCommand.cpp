@@ -26,23 +26,23 @@ void UserCommand::execute(Server &server, Client &client, const std::vector<std:
     }
     if(client.isRegistered())
     {
-        std::cout << "(462) ERR_ALREADYREGISTRED\n" << std::endl;
+        sendError(client.getFd(), 462, client.getNickname(), " ", "You're already registered!\n");
         return;
     }
 
     if(args.size() != 2 )
     {
-        std::cout << "(461) ERR_NEEDMOREPARAMS\n" << std::endl;
+        sendError(client.getFd(), 461, client.getNickname(), " ", "Needs more parameters\n");
         return;
     }
     if(!is_validNickOrUser(args[1]))
     {
-        sendMessage(client.getFd(), "User Invalid\n"); //Trocar 
+        sendError(client.getFd(), 432, client.getNickname(), " ", "Not a valid username\n");
         return;
     }
     else if(is_duplicateUser(server, args[1]))
     {
-        std::cout << "Error: Duplicate User\n" << std::endl;
+        sendError(client.getFd(), 433, client.getNickname(), " ", "Username is already in use\n");
         return;
     }
 

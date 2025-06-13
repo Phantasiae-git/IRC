@@ -11,12 +11,12 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 {
 	if(args.size()<3)
 	{
-		std::cout << "(461) ERR_NEEDMOREPARAMS" << std::endl;
+		sendError(client.getFd(), 461, client.getNickname(), " ", "Needs more parameters\n");
 		return;
 	}
 	if(server.channels.find(args[1])==server.channels.end())
 	{
-		std::cout << "(403) ERR_NOSUCHCHANNEL" << std::endl;
+		sendError(client.getFd(), 403, client.getNickname(), " ", "No such channel\n");
 		return;
 	}
 	

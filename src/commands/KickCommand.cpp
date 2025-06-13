@@ -11,17 +11,17 @@ void KickCommand::execute(Server &server, Client &client, const std::vector<std:
 {
 	if(args.size() < 3)
 	{
-		std::cout << "(461) ERR_NEEDMOREPARAMS" << std::endl;
+		sendError(client.getFd(), 461, client.getNickname(), " ", "Needs more parameters\n");
 		return;
 	}
 	if(args[1][0]!='#')
 	{
-		std::cout << "(476) ERR_BADCHANMASK" << std::endl;
+		sendError(client.getFd(), 476, client.getNickname(), " ", "Bad channel mask\n");
 		return;
 	}
 	if(server.channels.find(args[1])==server.channels.end())
 	{
-		std::cout << "(403) ERR_NOSUCHCHANNEL" << std::endl;
+		sendError(client.getFd(), 403, client.getNickname(), " ", "No such channel\n");
 		return;
 	}
 	std::map<std::string, Channel *> channels;
@@ -29,13 +29,13 @@ void KickCommand::execute(Server &server, Client &client, const std::vector<std:
 	std::map<std::string, Channel *>::iterator it=channels.find(args[1]);
 	if(it==channels.end())
 	{
-		std::cout << "(442) NOTONCHANNEL" << std::endl;
+		sendError(client.getFd(), 442, client.getNickname(), " ", "You're not on the channel\n");
 		return;
 	}
 	Channel *channel =it->second;
 	if(!channel->isOperator(&client))
 	{
-		std::cout << "(482) CHANOPRIVSNEEDED" << std::endl;
+		sendError(client.getFd(), 482, client.getNickname(), " ", "You're not a channel operator\n");
 		return;
 	}
 	
