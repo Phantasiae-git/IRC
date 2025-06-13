@@ -30,8 +30,6 @@ void Server::acceptNewClient()
 
 void Server::handleClientData(int i)
 {
-    // obter dados de um cliente existente
-    // usar um std::map para guardar os clients e usar os fds como indice e.g., std::map<int, Client*> clients
     char buf[256];
     int nbytes = recv(pfds[i].fd, buf, sizeof buf, 0);
     int sender_fd = pfds[i].fd; 
@@ -46,24 +44,25 @@ void Server::handleClientData(int i)
     }
     else
     {
-        // Guardar mensagem no input_buffer (append()) para ser feita transmissão só de uma mensagens completa "\r\n" de cada vez
-        // poderá haver no input_buffer partes da mensagem até estar completa ou mais do que uma mensagem completa obtida pelo recv()
-        // loop para obter menssagem completa usar find() e substr()
-        // usar outra string e.g, msg, para usar como mensagem completa
-        // fazer erase do buffer
+		_input_buffers[sender_fd].append(buf, nbytes);
 
-        // implementar comandos IMPORTANTANTE!!: é preciso fazer parsing da mensagem!
+		size_t pos;
+        while ((pos = _input_buffers[sender_fd].find("\n")) != std::string::npos) {
+            std::string msg = _input_buffers[sender_fd].substr(0, pos);
+            _input_buffers[sender_fd].erase(0, pos + 2);
+		
         for (size_t j = 0; j < pfds.size(); j++)
         {
             int dest_fd = pfds[j].fd;
             if (dest_fd != _listener_fd && dest_fd != sender_fd)
             {
-                if (send(dest_fd, buf, nbytes, 0) == -1)
-                { // usar a msg em vez de buf
+                if (send(dest_fd, msg.c_str(), msg.size(), 0) == -1)
+                {
                     std::cerr << "send error: " << errno << std::endl;
                 }
             }
         }
+		}
     }
 }
 void Server::disconnectClient(int i)
