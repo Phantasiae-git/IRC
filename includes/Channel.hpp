@@ -5,6 +5,7 @@
 #include "Client.hpp"
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 class Channel
 {
@@ -16,10 +17,13 @@ private:
     bool pass;
     std::vector<Client *> invited;
     std::string password;
+	std::vector<Client *> operators;
 
 public:
     Channel(const std::string &name, Client *creator);
     ~Channel();
+
+	void addUser(Client *user, std::string password));
 
 };
 
