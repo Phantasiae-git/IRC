@@ -4,26 +4,29 @@
 #include <string>
 #include "Client.hpp"
 #include <vector>
+#include <iostream>
+#include <algorithm>
+
+class Client;
 
 class Channel
 {
 private:
-    std::vector<Client> users;
+    std::vector<Client *> users;
     std::string name;
     std::string topic;
     bool invonly;
     bool pass;
-    std::vector<Client> invited;
+    std::vector<Client *> invited;
     std::string password;
+	std::vector<Client *> operators;
 
 public:
-    Channel();
-    Channel(const std::string &name);
-    Channel(const Channel &other);
+    Channel(const std::string &name, Client *creator);
     ~Channel();
 
-    Channel &operator=(const Channel &other);
-    // Other public member functions
+	void addUser(Client *user, std::string password);
+	void broadCast(Client *client, std::string msg);
 };
 
 #endif // Channel_HPP

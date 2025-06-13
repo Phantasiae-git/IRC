@@ -1,7 +1,7 @@
 #include "../includes/Client.hpp"
 
 Client::Client(int fd)
-: _fd(fd) {}
+: _fd(fd), _registered(false), _authenticated(false) {}
 
 Client::~Client() {}
 
@@ -25,6 +25,15 @@ void Client::setUsername(const std::string &username) {
 	_username = username;
 }
 
+
+void Client::setPassword(const std::string &password) {
+	_password = password;
+}
+
+std::string Client::getPassword() {
+	return _password;
+}
+
 void Client::setRegistered(bool registered) {
 	_registered = registered;
 }
@@ -33,3 +42,20 @@ bool Client::isRegistered() const {
 	return _registered;
 }
 
+void Client::setAuthentication(bool auth) {
+	_authenticated = auth;
+}
+
+bool Client::isAthenticated() const {
+	return _authenticated;
+}
+
+void Client::addChannel(Channel *channel)
+{
+	channels.push_back(channel);
+}
+
+std::vector<Channel *> Client::getChannels()
+{
+	return channels;
+}
