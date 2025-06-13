@@ -22,11 +22,16 @@ private:
 	std::vector<Client *> operators;
 
 public:
+	Channel();
     Channel(const std::string &name, Client *creator);
     ~Channel();
 
+	Channel &operator=(const Channel &other);
+
 	void addUser(Client *user, std::string password);
 	void broadCast(Client *client, std::string msg);
+	std::string getName();
+	int isOperator(Client *client);
 };
 
 #endif // Channel_HPP
