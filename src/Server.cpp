@@ -81,10 +81,7 @@ void Server::handleClientData(int i)
 			cmdhandler.handle(*this, *client, msg);
 			
 			if(client->isRegistered() && !client->isAthenticated())
-				disconnectClient(i);
-			else if(client->isAthenticated())
-				sendMessage(sender_fd, "You have successfully enter on server\n");
-			
+				disconnectClient(i);			
 		}
 	}
 	

@@ -9,12 +9,12 @@ KickCommand::~KickCommand()
 
 void KickCommand::execute(Server &server, Client &client, const std::vector<std::string> &args)
 {
-	if(args.size()<2)
+	if(args.size() < 3)
 	{
 		std::cout << "(461) ERR_NEEDMOREPARAMS" << std::endl;
 		return;
 	}
-	if(args[0][0]!='#')
+	if(args[1][0]!='#')
 	{
 		std::cout << "(476) ERR_BADCHANMASK" << std::endl;
 		return;
@@ -30,7 +30,7 @@ void KickCommand::execute(Server &server, Client &client, const std::vector<std:
 	int not_on_ch=1;
 	for(std::vector<Channel *>::iterator it=channels.begin();it!=channels.end();it++)
 	{
-		if((*it)->getName()==args[0])
+		if((*it)->getName()==args[1])
 		{
 			not_on_ch=0;
 			channel=*(*it);

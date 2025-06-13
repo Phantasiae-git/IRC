@@ -4,28 +4,45 @@ UserCommand::UserCommand() {}
 UserCommand::~UserCommand() {}
 
 
+bool UserCommand::is_duplicateUser(const Server &server, const std::string &user)
+{
+    const std::map<int, Client*> &clients = server.getClients();
+
+    for (std::map<int, Client*>::const_iterator it = clients.begin(); it != clients.end(); ++it) 
+    {
+        if (it->second && (it->second->getNickname()) == user)
+            return true;
+    }
+    return false;
+}
+
 void UserCommand::execute(Server &server, Client &client, const std::vector<std::string> &args) {
     
     (void)server;
     if(client.getNickname().empty())
     {
-        sendMessage(client.getFd(), "You must set a NickName before use USER\n");
+        std::cout << "You must set a NickName before use USER\n" << std::endl;
         return;
     }
     if(client.isRegistered())
     {
-        sendMessage(client.getFd(), "(462) ERR_ALREADYREGISTRED\n");
+        std::cout << "(462) ERR_ALREADYREGISTRED\n" << std::endl;
         return;
     }
 
     if(args.size() != 2 )
     {
-        sendMessage(client.getFd(), "(461) ERR_NEEDMOREPARAMS\n");
+        std::cout << "(461) ERR_NEEDMOREPARAMS\n" << std::endl;
         return;
     }
     if(!is_validNickOrUser(args[1]))
     {
         sendMessage(client.getFd(), "User Invalid\n"); //Trocar 
+        return;
+    }
+    else if(is_duplicateUser(server, args[1]))
+    {
+        std::cout << "Error: Duplicate User\n" << std::endl;
         return;
     }
 
@@ -36,5 +53,6 @@ void UserCommand::execute(Server &server, Client &client, const std::vector<std:
     if(client.getPassword() == server.getPassword())
     {
        client.setAuthentication(true);
+       sendMessage(client.getFd(), "You have successfully enter on server\n");
     }   
 }

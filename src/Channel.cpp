@@ -25,6 +25,14 @@ void Channel::setPassword(std::string pass) {
 	password = pass;
 }
 
+std::string Channel::getTopic() const {
+	return topic;
+}
+
+void Channel::setTopic(std::string Topic) {
+	topic = Topic;
+}
+
 Channel &Channel::operator=(const Channel &other)
 {
 	this->users=other.users;
