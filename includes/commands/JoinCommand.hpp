@@ -10,7 +10,7 @@ public:
 	JoinCommand();
 	~JoinCommand();
 
-    void execute(Server &server, Client &client, const std::vector<std::string> &args);
+	void execute(Server &server, Client &client, const std::vector<std::string> &args);
 };
 
 #endif

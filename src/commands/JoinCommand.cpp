@@ -6,9 +6,9 @@ JoinCommand::~JoinCommand() {}
 
 void JoinCommand::execute(Server &server, Client &client, const std::vector<std::string> &args) {
 
-	/*if (!client.isAthenticated()) {
+	if (!client.isAthenticated()) {
 		return ;
-	}*/
+	}
 	if (args.size() < 2) {
 		sendError(client.getFd(), 461, client.getNickname(), "JOIN", "Not enough parameters");
 		return;
@@ -29,7 +29,7 @@ void JoinCommand::execute(Server &server, Client &client, const std::vector<std:
 	}
 	else {
 		Channel* newChannel = new Channel(args[1], &client);
-		if (!args[2].empty()) {
+		if (args.size() >= 3 && !args[2].empty()) {
 			newChannel->setPassword(args[2]);
 		}
 		client.addChannel(newChannel);
