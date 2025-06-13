@@ -20,7 +20,6 @@ private:
 	std::string				_password;
 	std::vector<pollfd>		pfds;
 	std::map<int, Client*>	clients;
-	std::vector<Channel>	channels;
 	std::map<int, std::string>	_input_buffers;	
 	
 	void acceptNewClient();
@@ -29,6 +28,7 @@ private:
 	void SignalHandler(int signum);
 	
 public:
+	std::map<std::string, Channel*>	channels;
 	Server(int port, std::string password);
 	~Server();
 	const std::map<int, Client*> &getClients() const;

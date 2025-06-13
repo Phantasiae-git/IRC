@@ -64,6 +64,7 @@ void Server::handleClientData(int i)
 			cmdhandler.handle(*this, *client, msg);
 		}
 	}
+	
 }
 void Server::disconnectClient(int i)
 {

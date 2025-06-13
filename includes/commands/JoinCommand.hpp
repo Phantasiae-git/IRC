@@ -2,6 +2,7 @@
 # define JOINCOMMAND_HPP
 
 # include "ACommand.hpp"
+# include "../Channel.hpp"
 
 class JoinCommand : public ACommand
 {

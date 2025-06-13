@@ -15,6 +15,13 @@ Channel::~Channel()
 	std::cout << "Channel destructor called" << std::endl;
 }
 
+std::string Channel::getPassword() const {
+	return password;
+}
+
+void Channel::setPassword(std::string pass) {
+	password = pass;
+}
 
 void Channel::addUser(Client *user, std::string pword)
 {
