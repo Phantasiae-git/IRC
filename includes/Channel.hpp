@@ -39,6 +39,9 @@ public:
 	void removeUser(std::string name);
     std::string getTopic() const;
     void setTopic(std::string topic);
+    bool getT() const;
+    void setT(bool t_mode);
+
 };
 
 #endif // Channel_HPP

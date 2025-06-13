@@ -17,6 +17,14 @@ Channel::~Channel()
 	std::cout << "Channel destructor called" << std::endl;
 }
 
+bool Channel::getT() const {
+	return t;
+}
+
+void Channel::setT(bool t_mode) {
+	t = t_mode;
+}
+
 std::string Channel::getPassword() const {
 	return password;
 }

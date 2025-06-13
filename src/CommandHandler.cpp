@@ -29,7 +29,7 @@ CommandHandler::CommandHandler() {
     // _commands["NAMES"] = new NamesCommand();
     // _commands["KICK"] = new KickCommand();
     // _commands["INVITE"] = new InviteCommand();
-    // _commands["TOPIC"] = new TopicCommand();
+    _commands["TOPIC"] = new TopicCommand();
     // _commands["MODE"] = new ModeCommand();
 }
 

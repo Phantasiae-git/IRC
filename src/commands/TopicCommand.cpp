@@ -6,6 +6,8 @@ TopicCommand::~TopicCommand() {}
 
 void TopicCommand::execute(Server &server, Client &client, const std::vector<std::string> &args) {
 
+    (void)server;
+    
     if (!client.isAthenticated()) 
     {
 		return ;
@@ -20,24 +22,16 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
 		std::cout << "(476) ERR_BADCHANMASK" << std::endl;
 		return;
 	}
-    std::vector<Channel *> channels;
-	channels=client.getChannels();
+    std::map<std::string, Channel *> channels;
+	channels = client.getChannels();
 	Channel channel;
-	int not_on_ch=1;
-	for(std::vector<Channel *>::iterator it=channels.begin();it!=channels.end();it++)
-	{
-		if((*it)->getName() == args[1])
-		{
-			not_on_ch = 0;
-			channel=*(*it);
-		}
-	}
-	if(not_on_ch)
+	
+	if(channels.find(client.getUsername()) == channels.end())
 	{
 		std::cout << "(442) NOTONCHANNEL" << std::endl;
 		return;
 	}
-	if(!channel.isOperator(&client) ) //&& channel.t)
+	if(!channel.isOperator(&client) && channel.getT() == true)
 	{
 		std::cout << "(482) CHANOPRIVSNEEDED" << std::endl;
 		return;
@@ -46,13 +40,19 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
     if(args.size() == 2)
     {
         if(channel.getTopic().empty())
-           std::cout << "ESperar privmsg" << std::endl; //implementar priv msg //msg = <channel> :No topic is set
+           sendMessage(client.getFd(), args[1] + " :No topic is set\n");
         else
-            std::cout << "ESperar privmsg" << std::endl;//<channel> :<topic> ex 
+            sendMessage(client.getFd(), args[1] + " :" + channel.getTopic());
     }
     else if(args.size() == 3)
     {
-        std::cout << "ESperar privmsg" << std::endl;//set new topic
+        if(args[2][0] != ':')
+        {    
+            sendError(client.getFd(), 404, client.getNickname(), " ", "Topic must be have ':'\n");
+            return;
+        }
+        channel.broadCast(&client, ":" + client.getNickname() + "TOPIC " + channel.getName() + ": New Topic Define\n");
+        sendMessage(client.getFd(), ":" + client.getNickname() + "TOPIC " + channel.getName() + ": New Topic Define\n");
     }
 
     
