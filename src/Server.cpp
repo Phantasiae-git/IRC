@@ -9,6 +9,25 @@ Server::~Server()
     std::cout << "Server destructor called" << std::endl;
 }
 
+const std::map<int, Client*> &Server::getClients() const 
+{
+    return this->clients;
+}
+
+void Server::broadCast(Client *client, std::string msg)
+{
+    int sender_fd = client->getFd();
+
+    for (size_t j = 0; j < pfds.size(); j++)
+    {   
+        int dest_fd = pfds[j].fd;
+
+        if (dest_fd != _listener_fd && dest_fd != sender_fd)
+        {
+            sendMessage(dest_fd, msg);
+        }
+    }
+}
 void Server::acceptNewClient()
 {
     // novo cliente
@@ -26,6 +45,8 @@ void Server::acceptNewClient()
     std::cout << "yay! new connection from " << inet_ntoa(client_addr.sin_addr) << " on socket " << newclient.getFd() << std::endl;
 
     clients.insert(std::make_pair(newclient.getFd(), &newclient)); // adicionar cliente a um map
+
+    
     
 }
 
@@ -55,6 +76,7 @@ void Server::handleClientData(int i)
 
             std::map<int, Client*>::iterator it = clients.find(sender_fd);
             Client* client = it->second;
+
             cmdhandler.handle(*this, *client, msg);
         }
     }
@@ -98,6 +120,7 @@ void Server::run()
 
             for (size_t i = 0; i < pfds.size(); i++)
             {
+                
                 if (pfds[i].revents & (POLLIN))
                 {
                     if (pfds[i].fd == _listener_fd)

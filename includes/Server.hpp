@@ -26,6 +26,8 @@ private:
 	void handleClientData(int i);
 	void disconnectClient(int i);
 	void SignalHandler(int signum);
+	
+
 	//std::string &getInputBuffer();
     //void appendToBuffer(const std::string data)
     //void clearBufferUpTo(size_t pos)
@@ -33,6 +35,8 @@ private:
 public:
 	Server(int port, std::string password);
 	~Server();
+	const std::map<int, Client*> &getClients() const;
+	void broadCast(Client *client, std::string msg);
 	
 	bool start();
 	void run();
