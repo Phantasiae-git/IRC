@@ -4,7 +4,7 @@ RM = rm -rf
 NAME = ircserv
 
 SRCS = main.cpp src/Server.cpp src/Client.cpp src/CommandHandler.cpp src/utils.cpp \
-		src/commands/ACommand.cpp src/commands/NickCommand.cpp #src/commands/UserCommand.cpp
+		src/commands/ACommand.cpp src/commands/NickCommand.cpp src/commands/UserCommand.cpp
 	   
 
 OBJS = $(SRCS:.cpp=.o)

@@ -98,3 +98,22 @@ void	sendMessage(int fd, std::string msg) {
     send(fd, msg.c_str(), msg.size(), 0);
 }
 
+bool	is_validNickOrUser(const std::string &nickoruser)
+{
+	if (nickoruser.empty() || nickoruser.length() > 9)
+		return (false);
+
+	const std::string specialChars = "_[]\\`^{}";
+
+	if (!isalpha(nickoruser[0]) && specialChars.find(nickoruser[0]) == std::string::npos)
+		return (false);
+
+	for (size_t i = 1; i < nickoruser.length(); ++i)
+	{
+        if(nickoruser[i] <= 32 || nickoruser[i] == 127)
+            return (false);
+		if (!isalnum(nickoruser[i]) && specialChars.find(nickoruser[i]) == std::string::npos && nickoruser[i] != '-')
+			return (false);
+	}
+	return (true);
+}

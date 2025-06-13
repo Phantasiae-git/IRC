@@ -6,7 +6,6 @@
 class NickCommand : public ACommand
 {
 private:
-    bool	is_validNickName(const std::string &nickname);
     bool    is_duplicateNick(const Server &server, const std::string &nick);
 
 public:

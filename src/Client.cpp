@@ -17,20 +17,12 @@ const std::string &Client::getUsername() const {
 	return _username;
 }
 
-const std::string &Client::getRealname() const {
-	return _realname;
-}
-
 void Client::setNickname(const std::string &nickname) {
 	_nickname = nickname;
 }
 
 void Client::setUsername(const std::string &username) {
 	_username = username;
-}
-
-void Client::setRealname(const std::string &realname) {
-	_realname = realname;
 }
 
 void Client::setRegistered(bool registered) {
