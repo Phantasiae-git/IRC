@@ -18,6 +18,9 @@ Channel::~Channel()
 
 Channel &Channel::operator=(const Channel &other)
 {
+	users.clear();
+	operators.clear();
+	invited.clear();
 	this->users=other.users;
 	this->name=other.name;
 	this->topic=other.topic;
@@ -26,6 +29,7 @@ Channel &Channel::operator=(const Channel &other)
 	this->pass=other.pass;
 	this->password=other.password;
 	this->operators=other.operators;
+	return *this;
 }
 
 void Channel::addUser(Client *user, std::string pword)
