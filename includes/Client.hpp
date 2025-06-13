@@ -10,8 +10,6 @@ private:
     bool        _registered; // o cliente está ou não registado
     std::string _nickname;
     std::string _username;
-    std::string _realname;
-    //std::string _input_buffer; acho que é necessário guardar os dados recebidos para o caso de estarem incompletos ou appended a várias mensagens
 
 public:
     Client(int fd);

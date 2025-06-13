@@ -9,6 +9,7 @@
 #include <sys/socket.h>
 #include "utils.hpp"
 #include "Client.hpp"
+#include "Channel.hpp"
 #include <csignal>
 
 class Server
@@ -19,6 +20,7 @@ private:
 	std::string				_password;
 	std::vector<pollfd>		pfds;
 	std::map<int, Client*>	clients;
+	std::vector<Channel>	channels;
 	std::map<int, std::string>	_input_buffers;
 
 
