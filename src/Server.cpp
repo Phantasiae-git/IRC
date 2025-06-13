@@ -65,6 +65,8 @@ void Server::handleClientData(int i)
 			
 			if(client->isRegistered() && !client->isAthenticated())
 				disconnectClient(i);
+			else if(client->isAthenticated())
+				sendMessage(sender_fd, "You have successfully enter on server\n");
 			
 		}
 	}
@@ -73,8 +75,12 @@ void Server::handleClientData(int i)
 void Server::disconnectClient(int i)
 {
 	std::cout << "client disconnected on socket " << pfds[i].fd << std::endl;
-	close(pfds[i].fd);
+	
+	
 	std::map<int, Client*>::iterator it = clients.find(pfds[i].fd);
+	sendError(it->second->getFd(), 404, it->second->getNickname(), " ", "You have been disconnected. Please restart conection\n");
+	
+	close(pfds[i].fd);
 	if (it != clients.end()) {
 		delete it->second;
 		clients.erase(it);
