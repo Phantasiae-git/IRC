@@ -5,6 +5,8 @@
 Channel::Channel(const std::string &name, Client *creator) : name(name)
 {
 	users.insert(std::make_pair(creator->getUsername(), creator));
+	std::cout << "Users Size: " << users.size() << std::endl;
+	std::cout << "FIrst: " << (users.begin())->first << std::endl;
 	operators.insert(std::make_pair(creator->getUsername(), creator));
 	invonly=0;
 	pass=0;

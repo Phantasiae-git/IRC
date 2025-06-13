@@ -36,7 +36,7 @@ CommandHandler::CommandHandler() {
 CommandHandler::~CommandHandler() {
     for (std::map<std::string, ACommand*>::iterator it = _commands.begin(); it != _commands.end(); ++it) {
         delete it->second;
-    }
+    }   
 }
 
 void CommandHandler::handle(Server &server, Client &client, const std::string &line) {

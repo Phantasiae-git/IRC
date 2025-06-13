@@ -7,7 +7,7 @@ TopicCommand::~TopicCommand() {}
 void TopicCommand::execute(Server &server, Client &client, const std::vector<std::string> &args) {
 
     (void)server;
-    
+
     if (!client.isAthenticated()) 
     {
 		return ;
@@ -23,15 +23,15 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
 		return;
 	}
     std::map<std::string, Channel *> channels;
-	channels = client.getChannels();
-	Channel channel;
-	
-	if(channels.find(client.getUsername()) == channels.end())
+	channels=client.getChannels();
+	std::map<std::string, Channel *>::iterator it=channels.find(args[1]);
+	if(it==channels.end())
 	{
 		std::cout << "(442) NOTONCHANNEL" << std::endl;
 		return;
 	}
-	if(!channel.isOperator(&client) && channel.getT() == true)
+	Channel *channel =it->second;
+	if(!channel->isOperator(&client) && channel->getT() == true)
 	{
 		std::cout << "(482) CHANOPRIVSNEEDED" << std::endl;
 		return;
@@ -39,20 +39,16 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
 
     if(args.size() == 2)
     {
-        if(channel.getTopic().empty())
+        if(channel->getTopic().empty())
            sendMessage(client.getFd(), args[1] + " :No topic is set\n");
         else
-            sendMessage(client.getFd(), args[1] + " :" + channel.getTopic());
+            sendMessage(client.getFd(), args[1] + " :" + channel->getTopic());
     }
     else if(args.size() == 3)
     {
-        if(args[2][0] != ':')
-        {    
-            sendError(client.getFd(), 404, client.getNickname(), " ", "Topic must be have ':'\n");
-            return;
-        }
-        channel.broadCast(&client, ":" + client.getNickname() + "TOPIC " + channel.getName() + ": New Topic Define\n");
-        sendMessage(client.getFd(), ":" + client.getNickname() + "TOPIC " + channel.getName() + ": New Topic Define\n");
+        channel->setTopic(args[2]);
+        channel->broadCast(&client, ":" + client.getNickname() + " TOPIC " + channel->getName() + ": New Topic Define\n");
+        sendMessage(client.getFd(), ":" + client.getNickname() + " TOPIC " + channel->getName() + ": New Topic Define\n");
     }
 
     
