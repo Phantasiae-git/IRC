@@ -13,10 +13,6 @@ private:
     std::string _realname;
     //std::string _input_buffer; acho que é necessário guardar os dados recebidos para o caso de estarem incompletos ou appended a várias mensagens
 
-    Client();
-    Client(const Client &other);
-    Client &operator=(const Client &other);
-
 public:
     Client(int fd);
     ~Client();
