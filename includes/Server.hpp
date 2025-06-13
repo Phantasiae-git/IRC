@@ -37,6 +37,9 @@ public:
 	void disconnectClient(int i);
 	
 	std::string getPassword() const;
+	void addClient(int fd, Client *client);
+	std::map<int, Client*> getClients();
+    Client* findClient(std::string name);
 };
 
 #endif

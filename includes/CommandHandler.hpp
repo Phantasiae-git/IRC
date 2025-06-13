@@ -12,6 +12,7 @@
 #include "commands/UserCommand.hpp"
 #include "commands/PassCommand.hpp"
 #include "commands/JoinCommand.hpp"
+#include "commands/PrivmsgCommand.hpp"
 
 class CommandHandler
 {

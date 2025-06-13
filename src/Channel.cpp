@@ -7,7 +7,7 @@ Channel::Channel(const std::string &name, Client *creator) : name(name)
 	operators.push_back(creator);
 	invonly=0;
 	pass=0;
-	creator->addChannel(this);
+	creator->addChannel(name, this);
 }
 
 Channel::~Channel()
@@ -48,7 +48,7 @@ void Channel::addUser(Client *user, std::string pword)
 	if(pass && pword!=password)
 		return;
 	users.push_back(user);
-	user->addChannel(this);
+	user->addChannel(name, this);
 }
 
 
@@ -62,7 +62,7 @@ void Channel::broadCast(Client *client, std::string msg)
 
         if (dest_fd != sender_fd)
         {
-            sendMessage(dest_fd, msg);
+			send(dest_fd, msg.c_str(), msg.size(), 0);
         }
     }
 }

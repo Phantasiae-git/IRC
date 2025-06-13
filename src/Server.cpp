@@ -18,6 +18,23 @@ const std::map<int, Client*> &Server::getClients() const
     return this->clients;
 }
 
+void Server::addClient(int fd, Client *client) {
+	clients.insert(std::make_pair(fd, client));
+
+}
+
+std::map<int, Client*> Server::getClients() {
+	return clients;
+}
+
+Client* Server::findClient(std::string name) {
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++) {
+		if (name == it->second->getNickname()) {
+			return it->second;
+		}
+	}
+	return NULL;
+}
 
 void Server::acceptNewClient()
 {
