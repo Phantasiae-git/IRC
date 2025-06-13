@@ -34,6 +34,8 @@ public:
     void setPassword(std::string pass);
 	std::string getName();
 	int isOperator(Client *client);
+	std::vector<Client *> getUsers();
+	void removeUser(Client *user);
 };
 
 #endif // Channel_HPP

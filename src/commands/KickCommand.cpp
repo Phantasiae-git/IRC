@@ -43,5 +43,12 @@ void KickCommand::execute(Server &server, Client &client, const std::vector<std:
 		return;
 	}
 	
+	std::vector<Client *> members;
+	members=channel.getUsers();
 	
+	for(std::vector<Client *>::iterator it= members.begin(); it!=members.end(); it++)
+	{
+		if((*it)->getUsername()==args[1])
+			channel.removeUser(*it);
+	}
 }

@@ -25,9 +25,6 @@ void Channel::setPassword(std::string pass) {
 
 Channel &Channel::operator=(const Channel &other)
 {
-	users.clear();
-	operators.clear();
-	invited.clear();
 	this->users=other.users;
 	this->name=other.name;
 	this->topic=other.topic;
@@ -79,4 +76,16 @@ int Channel::isOperator(Client *client)
 		return 1;
 	else
 		return 0;
+}
+
+std::vector<Client *> Channel::getUsers()
+{
+	return users;
+}
+
+void Channel::removeUser(Client *user)
+{
+	std::vector<Client *>::iterator userpos=std::find(users.begin(),users.end(), user);
+	if(userpos!=users.end())
+		users.erase(userpos);
 }
