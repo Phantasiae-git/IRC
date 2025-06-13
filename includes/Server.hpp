@@ -24,7 +24,6 @@ private:
 	
 	void acceptNewClient();
 	void handleClientData(int i);
-	void disconnectClient(int i);
 	void SignalHandler(int signum);
 	
 public:
@@ -35,6 +34,7 @@ public:
 	
 	bool start();
 	void run();
+	void disconnectClient(int i);
 	
 	std::string getPassword() const;
 };

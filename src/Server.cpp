@@ -62,6 +62,10 @@ void Server::handleClientData(int i)
 			std::map<int, Client*>::iterator it = clients.find(sender_fd);
 			Client* client = it->second;
 			cmdhandler.handle(*this, *client, msg);
+			
+			if(client->isRegistered() && !client->isAthenticated())
+				disconnectClient(i);
+			
 		}
 	}
 	
