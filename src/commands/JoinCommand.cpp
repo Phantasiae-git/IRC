@@ -19,13 +19,15 @@ void JoinCommand::execute(Server &server, Client &client, const std::vector<std:
 	}
 	std::map<std::string, Channel*>::iterator it = server.channels.find(args[1]);
 	if (it != server.channels.end()) {
-		if (it->second->getPassword().empty() == false) {
+		if (!it->second->getPassword().empty()) {
 			if (args.size() < 3 || it->second->getPassword() != args[2]) {
 				sendError(client.getFd(), 475, client.getNickname(), it->first, "Cannot join channel (+k)");
 				return ;
 			}
-		}
-		client.addChannel(it->second);
+			it->second->addUser(&client, args[2]);
+		} 
+		else
+			it->second->addUser(&client, "");
 		sendMessage(client.getFd(), "Joined Channel\n");
 	}
 	else {
@@ -34,7 +36,6 @@ void JoinCommand::execute(Server &server, Client &client, const std::vector<std:
 		if (args.size() >= 3 && !args[2].empty()) {
 			newChannel->setPassword(args[2]);
 		}
-		client.addChannel(newChannel);
 		server.channels.insert(std::make_pair(args[1], newChannel));
 		sendMessage(client.getFd(), "Created Channel\n");
 	}

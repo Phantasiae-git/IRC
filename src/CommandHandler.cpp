@@ -22,7 +22,7 @@ CommandHandler::CommandHandler() {
     _commands["USER"] = new UserCommand();
     _commands["JOIN"] = new JoinCommand();
     // _commands["PART"] = new PartCommand();
-    // _commands["PRIVMSG"] = new PrivmsgCommand();
+    _commands["PRIVMSG"] = new PrivmsgCommand();
     //_commands["PING"] = new PingCommand();
     // _commands["QUIT"] = new QuitCommand();
     // _commands["LIST"] = new ListCommand();

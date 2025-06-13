@@ -50,12 +50,20 @@ bool Client::isAthenticated() const {
 	return _authenticated;
 }
 
-void Client::addChannel(Channel *channel)
+void Client::addChannel(std::string name, Channel *channel)
 {
-	channels.push_back(channel);
+	channels.insert(std::make_pair(name, channel));
 }
 
-std::vector<Channel *> Client::getChannels()
+std::map<std::string, Channel *> Client::getChannels()
 {
 	return channels;
+}
+
+Channel* Client::findChannel(std::string name) {
+	std::map<std::string, Channel*>::iterator it = channels.find(name);
+	if (it != channels.end()) {
+		return it->second;
+	}
+	return NULL;
 }

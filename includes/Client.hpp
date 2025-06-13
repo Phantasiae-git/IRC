@@ -4,6 +4,7 @@
 #include <string>
 #include "Channel.hpp"
 #include <vector>
+#include <map>
 
 class Channel;
 
@@ -17,8 +18,7 @@ private:
     std::string _username;
 
     std::string _password;
-	  std::vector<Channel *> channels;
-
+	std::map<std::string, Channel *> channels;
 
 public:
     Client(int fd);
@@ -39,9 +39,10 @@ public:
     void setAuthentication(bool auth);
     bool isAthenticated() const;
 
-	void addChannel(Channel *channel);
-	std::vector<Channel *> getChannels();
-	
+    void addChannel(std::string name, Channel *channel);
+	std::map<std::string, Channel *> getChannels();
+    Channel* findChannel(std::string name);
+
     std::string getPassword();
 
 };
