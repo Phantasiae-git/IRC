@@ -26,7 +26,7 @@ void KickCommand::execute(Server &server, Client &client, const std::vector<std:
 	}
 	std::map<std::string, Channel *> channels;
 	channels=client.getChannels();
-	std::map<std::string, Channel *>::iterator it=channels.find(client.getUsername());
+	std::map<std::string, Channel *>::iterator it=channels.find(args[1]);
 	if(it==channels.end())
 	{
 		std::cout << "(442) NOTONCHANNEL" << std::endl;
