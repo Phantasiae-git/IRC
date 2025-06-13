@@ -83,5 +83,5 @@ int get_listen_sock(int port)
 }
 
 void signalHandler(int signum) {
-    (void)signum;
+	exit(signum);
 }
