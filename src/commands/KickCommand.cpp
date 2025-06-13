@@ -24,19 +24,11 @@ void KickCommand::execute(Server &server, Client &client, const std::vector<std:
 		std::cout << "(403) ERR_NOSUCHCHANNEL" << std::endl;
 		return;
 	}
-	std::vector<Channel *> channels;
-	channels=client.getChannels();
+	std::map<std::string, Channel *> channels;
+	channels = client.getChannels();
 	Channel channel;
 	int not_on_ch=1;
-	for(std::vector<Channel *>::iterator it=channels.begin();it!=channels.end();it++)
-	{
-		if((*it)->getName()==args[1])
-		{
-			not_on_ch=0;
-			channel=*(*it);
-		}
-	}
-	if(not_on_ch)
+	if(channels.find(client.getUsername()) == channels.end())
 	{
 		std::cout << "(442) NOTONCHANNEL" << std::endl;
 		return;
