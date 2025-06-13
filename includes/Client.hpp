@@ -26,9 +26,7 @@ public:
     void setRegistered(bool registered);
     bool isRegistered() const;
 
-    //std::string &getInputBuffer();
-    //void appendToBuffer(const std::string data)
-    //void clearBufferUpTo(size_t pos)
+    
 };
 
 #endif

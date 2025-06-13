@@ -22,7 +22,7 @@
     // l <n>: define limite de users
 
 CommandHandler::CommandHandler() {
-    //_commands["NICK"] = new NickCommand();
+    _commands["NICK"] = new NickCommand();
     //_commands["USER"] = new UserCommand();
     // _commands["JOIN"] = new JoinCommand();
     // _commands["PART"] = new PartCommand();
@@ -49,13 +49,12 @@ void CommandHandler::handle(Server &server, Client &client, const std::string &l
         return;
     }
 
-    std::string commandName = toUpper(args[0]);
-    std::map<std::string, ACommand*>::iterator it = _commands.find(commandName);
+    std::map<std::string, ACommand*>::iterator it = _commands.find(args[0]);
 
     if (it != _commands.end()) {
         it->second->execute(server, client, args);
     }
     else {
-        std::cout << "421 " << commandName << " : Unkown command" << std::endl;
+        sendMessage(client.getFd(), "421 " + args[0] + " : Unkown command\n");
     }
 }

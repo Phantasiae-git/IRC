@@ -1,4 +1,5 @@
 #include "../includes/Server.hpp"
+#include "../includes/CommandHandler.hpp"
 
 Server::Server(int port, std::string pswd)
     : _listener_fd(-1), _port(port), _password(pswd) {}
@@ -8,28 +9,53 @@ Server::~Server()
     std::cout << "Server destructor called" << std::endl;
 }
 
+const std::map<int, Client*> &Server::getClients() const 
+{
+    return this->clients;
+}
+
+void Server::broadCast(Client *client, std::string msg)
+{
+    int sender_fd = client->getFd();
+
+    for (size_t j = 0; j < pfds.size(); j++)
+    {   
+        int dest_fd = pfds[j].fd;
+
+        if (dest_fd != _listener_fd && dest_fd != sender_fd)
+        {
+            sendMessage(dest_fd, msg);
+        }
+    }
+}
 void Server::acceptNewClient()
 {
     // novo cliente
     sockaddr_in client_addr;
     socklen_t cl_addr_len = sizeof client_addr;
 
-    int clientfd = accept(_listener_fd, (sockaddr *)&client_addr, &cl_addr_len);
-    if (clientfd < 0)
+    Client newclient(accept(_listener_fd, (sockaddr *)&client_addr, &cl_addr_len));
+    
+    if (newclient.getFd() < 0)
     {
         std::cerr << "accept failed: " << errno << std::endl;
         return;
     }
-    pfds.push_back((pollfd){clientfd, POLLIN, 0});
-    std::cout << "yay! new connection from " << inet_ntoa(client_addr.sin_addr) << " on socket " << clientfd << std::endl;
-    // adicionar cliente a um map
+    pfds.push_back((pollfd){newclient.getFd(), POLLIN, 0});
+    std::cout << "yay! new connection from " << inet_ntoa(client_addr.sin_addr) << " on socket " << newclient.getFd() << std::endl;
+
+    clients.insert(std::make_pair(newclient.getFd(), &newclient)); // adicionar cliente a um map
+
+    
+    
 }
 
 void Server::handleClientData(int i)
 {
+    CommandHandler cmdhandler;
     char buf[256];
     int nbytes = recv(pfds[i].fd, buf, sizeof buf, 0);
-    int sender_fd = pfds[i].fd;
+    int sender_fd = pfds[i].fd; 
 
 	std::cout << nbytes << std::endl;
     if (nbytes < 1)
@@ -48,19 +74,12 @@ void Server::handleClientData(int i)
         while ((pos = _input_buffers[sender_fd].find("\n")) != std::string::npos) {
             std::string msg = _input_buffers[sender_fd].substr(0, pos);
             _input_buffers[sender_fd].erase(0, pos + 2);
-		
-        for (size_t j = 0; j < pfds.size(); j++)
-        {
-            int dest_fd = pfds[j].fd;
-            if (dest_fd != _listener_fd && dest_fd != sender_fd)
-            {
-                if (send(dest_fd, msg.c_str(), msg.size(), 0) == -1)
-                {
-                    std::cerr << "send error: " << errno << std::endl;
-                }
-            }
+
+            std::map<int, Client*>::iterator it = clients.find(sender_fd);
+            Client* client = it->second;
+
+            cmdhandler.handle(*this, *client, msg);
         }
-		}
     }
 }
 void Server::disconnectClient(int i)
@@ -102,6 +121,7 @@ void Server::run()
 
             for (size_t i = 0; i < pfds.size(); i++)
             {
+                
                 if (pfds[i].revents & (POLLIN))
                 {
                     if (pfds[i].fd == _listener_fd)
