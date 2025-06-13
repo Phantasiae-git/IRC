@@ -16,6 +16,18 @@ Channel::~Channel()
 }
 
 
+Channel &Channel::operator=(const Channel &other)
+{
+	this->users=other.users;
+	this->name=other.name;
+	this->topic=other.topic;
+	this->invited=other.invited;
+	this->invonly=other.invonly;
+	this->pass=other.pass;
+	this->password=other.password;
+	this->operators=other.operators;
+}
+
 void Channel::addUser(Client *user, std::string pword)
 {
 	if (std::find(users.begin(), users.end(), user) != users.end())
@@ -42,4 +54,18 @@ void Channel::broadCast(Client *client, std::string msg)
             sendMessage(dest_fd, msg);
         }
     }
+}
+
+
+std::string Channel::getName()
+{
+	return name;
+}
+
+int Channel::isOperator(Client *client)
+{
+	if(std::find(operators.begin(),operators.end(), client)!=operators.end())
+		return 1;
+	else
+		return 0;
 }
