@@ -17,7 +17,6 @@ void JoinCommand::execute(Server &server, Client &client, const std::vector<std:
 		sendError(client.getFd(), 476, client.getNickname(), args[1], "Bad Channel Mask");
 		return;
 	}
-	std::map<std::string, Channel*>::iterator its = server.channels.find(args[1]);
 	std::map<std::string, Channel*>::iterator it = server.channels.find(args[1]);
 	if (it != server.channels.end()) {
 		if (!it->second->getPassword().empty()) {
