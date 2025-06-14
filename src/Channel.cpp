@@ -103,6 +103,8 @@ int Channel::isOperator(Client *client)
 void Channel::removeUser(std::string name)
 {
 	std::map<std::string, Client *>::iterator userpos=users.find(name);
-	if(userpos!=users.end())
-		users.erase(userpos);
+	if(userpos==users.end())
+		return;
+	userpos->second->removeChannel(this);
+	users.erase(userpos);
 }

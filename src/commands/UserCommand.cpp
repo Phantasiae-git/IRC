@@ -10,7 +10,7 @@ bool UserCommand::is_duplicateUser(const Server &server, const std::string &user
 
 	for (std::map<int, Client*>::const_iterator it = clients.begin(); it != clients.end(); ++it) 
 	{
-		if (it->second && (it->second->getNickname()) == user)
+		if (it->second && (it->second->getUsername()) == user)
 			return true;
 	}
 	return false;
