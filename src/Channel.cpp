@@ -130,3 +130,10 @@ void Channel::removeUser(std::string name, Client *kicker, std::string message)
 std::map<std::string, Client *> Channel::getUsers(){
 	return users;
 }
+
+void Channel::addToOperators(Client *user)
+{
+	if (operators.find(user->getUsername())!=operators.end())
+   		return;
+	operators.insert(std::make_pair(user->getUsername(), user));;
+}

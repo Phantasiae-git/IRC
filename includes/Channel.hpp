@@ -51,6 +51,8 @@ public:
     void setLimitUsers(size_t limit);
     bool getInviteOnly() const;
     void setInviteOnly(bool inviteOnly);
+    void addToOperators(Client *user);
+
 };
 
 #endif // Channel_HPP

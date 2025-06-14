@@ -116,9 +116,7 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
                         sendError(client.getFd(), 467, client.getNickname(), channel->getName(), "Channel key already set");
                         return;
                     }
-					std::cout << "Password: " << channel->getPassword() << std::endl;
 					channel->setPassword(arg);
-					std::cout << "Password: " << channel->getPassword() << std::endl;
 
 				}
 				else if(sign == '-')
@@ -133,16 +131,24 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
                         sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "Only numbers plss"); //mudar msg
                         return;
                     }
-					std::cout << "Limit: " << channel->getLimitUsers() << std::endl;
-
 					int limit = atoi(arg.c_str());
+					if(limit < channel->getUsers().size())
+					{
+                        sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "Set a bigger limit or kick some people first"); //mudar msg
+                        return;
+                    }
 					channel->setLimitUsers(limit);
-					std::cout << "Limit: " << channel->getLimitUsers() << std::endl;
 				}
 				else if(sign == '-')
 					channel->setLimitUsers(0);
 			}
+			else if(c == 'o')
+			{
+				std::map<std::string, Client *> users = channel->getUsers();
+
+			}
 		}
+		
 	}
 	if(!mode_after_sign)
 	{
