@@ -132,7 +132,7 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
                         return;
                     }
 					int limit = atoi(arg.c_str());
-					if(limit < channel->getUsers().size())
+					if(limit < (int)channel->getUsers().size())
 					{
                         sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "Set a bigger limit or kick some people first"); //mudar msg
                         return;
