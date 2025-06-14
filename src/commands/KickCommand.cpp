@@ -9,6 +9,9 @@ KickCommand::~KickCommand()
 
 void KickCommand::execute(Server &server, Client &client, const std::vector<std::string> &args)
 {
+	if (!client.isAthenticated()) {
+		return ;
+	}
 	if(args.size() < 3)
 	{
 		sendError(client.getFd(), 461, client.getNickname(), " ", "Needs more parameters\n");
