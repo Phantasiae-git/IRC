@@ -8,12 +8,20 @@ Channel::Channel(const std::string &name, Client *creator) : name(name)
 	operators.insert(std::make_pair(creator->getUsername(), creator));
 	invonly=0;
 	pass=0;
+	limitUsers = 0;
 	t=0;
 	creator->addChannel(name, this);
 }
 
 Channel::~Channel()
 {
+}
+bool Channel::getInviteOnly() const {
+	return invonly;
+}
+
+void Channel::setInviteOnly(bool inviteOnly) {
+	invonly = inviteOnly;
 }
 
 bool Channel::getT() const {
@@ -38,6 +46,15 @@ std::string Channel::getTopic() const {
 
 void Channel::setTopic(std::string Topic) {
 	topic = Topic;
+}
+
+
+size_t Channel::getLimitUsers() const {
+	return limitUsers;
+}
+
+void Channel::setLimitUsers(size_t limit) {
+	limitUsers = limit;
 }
 
 Channel &Channel::operator=(const Channel &other)

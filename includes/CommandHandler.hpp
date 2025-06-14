@@ -16,6 +16,7 @@
 #include "commands/TopicCommand.hpp"
 #include "commands/InviteCommand.hpp"
 #include "commands/KickCommand.hpp"
+#include "commands/ModeCommand.hpp"
 
 class CommandHandler
 {
