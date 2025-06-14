@@ -12,6 +12,9 @@ std::string writeMsg(std::string src, std::string dest, std::string msg) {
 
 void PrivmsgCommand::execute(Server &server, Client &client, const std::vector<std::string> &args) {
 
+	if (!client.isAthenticated()) {
+		return ;
+	}
 	if (args.size() < 3) {
 		sendError(client.getFd(), 461, client.getNickname(), "PRIVMSG", "Not enough parameters");
 		return;
