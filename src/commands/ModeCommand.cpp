@@ -145,7 +145,13 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 			else if(c == 'o')
 			{
 				std::map<std::string, Client *> users = channel->getUsers();
-
+				std::map<std::string, Client *>::iterator targetClient = users.find(arg);
+				if(targetClient == users.end())
+				{
+					sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "No such user on the channel"); //mudar msg
+					return;
+				}
+				channel->addToOperators(targetClient->second);
 			}
 		}
 		
