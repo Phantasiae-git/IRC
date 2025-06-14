@@ -40,17 +40,17 @@ public:
     void setPassword(std::string pass);
 	std::string getName();
 	int isOperator(Client *client);
-	void removeUser(std::string name);
+	void removeUser(std::string name, Client *kicker, std::string message);
     std::string getTopic() const;
     void setTopic(std::string topic);
     bool getT() const;
     void setT(bool t_mode);
+  
+	std::map<std::string, Client *> getUsers();
     size_t getLimitUsers() const;
     void setLimitUsers(size_t limit);
     bool getInviteOnly() const;
     void setInviteOnly(bool inviteOnly);
-
-
 };
 
 #endif // Channel_HPP

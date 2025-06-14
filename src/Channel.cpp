@@ -117,11 +117,16 @@ int Channel::isOperator(Client *client)
 	return (operators.find(client->getUsername())!=operators.end());
 }
 
-void Channel::removeUser(std::string name)
+void Channel::removeUser(std::string name, Client *kicker, std::string message)
 {
 	std::map<std::string, Client *>::iterator userpos=users.find(name);
 	if(userpos==users.end())
 		return;
 	userpos->second->removeChannel(this);
 	users.erase(userpos);
+	broadCast(kicker, message);
+}
+
+std::map<std::string, Client *> Channel::getUsers(){
+	return users;
 }
