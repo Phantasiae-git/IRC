@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <cctype>
 #include <map>
 
 class Client;
@@ -18,6 +19,7 @@ private:
     std::string topic;
     bool invonly;
     bool pass;
+    size_t limitUsers;
     std::map<std::string, Client *> invited;
     std::string password;
 	std::map<std::string, Client *> operators;
@@ -43,6 +45,11 @@ public:
     void setTopic(std::string topic);
     bool getT() const;
     void setT(bool t_mode);
+    size_t getLimitUsers() const;
+    void setLimitUsers(size_t limit);
+    bool getInviteOnly() const;
+    void setInviteOnly(bool inviteOnly);
+
 
 };
 
