@@ -6,7 +6,7 @@ UserCommand::~UserCommand() {}
 
 bool UserCommand::is_duplicateUser(const Server &server, const std::string &user)
 {
-std::map<int, Client*> &clients = server.getClients();
+	const std::map<int, Client*> &clients = server.getClients();
 
 	for (std::map<int, Client*>::const_iterator it = clients.begin(); it != clients.end(); ++it) 
 	{
