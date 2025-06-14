@@ -42,6 +42,7 @@ public:
     void addChannel(std::string name, Channel *channel);
 	std::map<std::string, Channel *> getChannels();
     Channel* findChannel(std::string name);
+	void removeChannel(Channel *channel);
 
     std::string getPassword();
 

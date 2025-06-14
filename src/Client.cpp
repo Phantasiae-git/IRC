@@ -67,3 +67,11 @@ Channel* Client::findChannel(std::string name) {
 	}
 	return NULL;
 }
+
+void Client::removeChannel(Channel *channel)
+{
+	std::map<std::string, Channel *>::iterator channelpos= channels.find(channel->getName());
+	if(channelpos==channels.end())
+		return;
+	channels.erase(channelpos);
+}

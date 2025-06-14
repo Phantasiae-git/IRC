@@ -64,6 +64,7 @@ void Channel::addUser(Client *user, std::string pword)
 		return;
 	users.insert(std::make_pair(user->getUsername(), user));;
 	user->addChannel(name, this);
+	sendMessage(user->getFd(), "Joined Channel\n");
 }
 
 void Channel::addToInvited(Client *user)
