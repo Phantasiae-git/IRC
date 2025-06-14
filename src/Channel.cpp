@@ -5,8 +5,6 @@
 Channel::Channel(const std::string &name, Client *creator) : name(name)
 {
 	users.insert(std::make_pair(creator->getUsername(), creator));
-	std::cout << "Users Size: " << users.size() << std::endl;
-	std::cout << "FIrst: " << (users.begin())->first << std::endl;
 	operators.insert(std::make_pair(creator->getUsername(), creator));
 	invonly=0;
 	pass=0;
@@ -76,13 +74,14 @@ Channel &Channel::operator=(const Channel &other)
 void Channel::addUser(Client *user, std::string pword)
 {
 	if (users.find(user->getUsername())!=users.end())
-   		return;
-	if(invonly && (invited.find(user->getUsername())==users.end()))
+		return;
+	if (invonly && (invited.find(user->getUsername())==users.end()))
 		return;
 	if(pass && pword!=password)
 		return;
 	users.insert(std::make_pair(user->getUsername(), user));;
 	user->addChannel(name, this);
+	sendMessage(user->getFd(), "Joined Channel\n");
 }
 
 void Channel::addToInvited(Client *user)
@@ -121,6 +120,8 @@ int Channel::isOperator(Client *client)
 void Channel::removeUser(std::string name)
 {
 	std::map<std::string, Client *>::iterator userpos=users.find(name);
-	if(userpos!=users.end())
-		users.erase(userpos);
+	if(userpos==users.end())
+		return;
+	userpos->second->removeChannel(this);
+	users.erase(userpos);
 }

@@ -28,7 +28,6 @@ void JoinCommand::execute(Server &server, Client &client, const std::vector<std:
 		} 
 		else
 			it->second->addUser(&client, "");
-		sendMessage(client.getFd(), "Joined Channel\n");
 	}
 	else {
 		Channel* newChannel = new Channel(args[1], &client);

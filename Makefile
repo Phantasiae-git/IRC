@@ -1,5 +1,5 @@
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++98 #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -std=c++98 -g #-fsanitize=address
 RM = rm -rf
 NAME = ircserv
 
@@ -29,6 +29,9 @@ fclean: clean
 re: fclean all
 
 run: all clean
-	./$(NAME)
+	./$(NAME) $(ARGS)
 
-.PHONY: all clean fclean re run
+valgrind:
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --log-file=valgrind.log ./$(NAME) $(ARGS)
+
+.PHONY: all clean fclean re run valgrind

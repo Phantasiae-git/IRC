@@ -15,6 +15,7 @@
 #include <sstream>
 #include <map>
 #include "Client.hpp"
+#include <csignal>
 
 int                         get_listen_sock(int port);
 void                        *get_in_addr(sockaddr *sa);
