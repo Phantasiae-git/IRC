@@ -55,6 +55,7 @@ public:
     std::string getFormattedUserList() const;
     int isInvited(Client *client);
 	void eraseUser(std::string name);
+	int removeOp(Client *client);
 };
 
 #endif // Channel_HPP

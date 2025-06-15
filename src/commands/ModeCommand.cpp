@@ -143,9 +143,9 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 				{
 					if(!is_allNumbers(arg.c_str()))
 					{
-						sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "Only numbers plss"); //mudar msg
-						return;
-					}
+             sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "Only numbers pls"); //mudar msg
+             return;
+          }
 					int limit = atoi(arg.c_str());
 					if(limit < (int)channel->getUsers().size())
 					{
@@ -172,8 +172,16 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 					sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "No such user on the channel"); //mudar msg
 					return;
 				}
-				channel->addToOperators(targetClient->second);
-				sendModeMessage(channel, &client, "+o " + targetClient->second->getNickname());
+				if(sign=='+')
+				{
+			      channel->addToOperators(targetClient->second);
+				    sendModeMessage(channel, &client, "+o " + targetClient->second->getNickname());
+				}
+				else
+				{
+					if(!channel->removeOp(targetClient->second))
+						sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "Target is not an operator on this channel");
+				}
 			}
 		}		
 	}
