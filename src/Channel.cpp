@@ -123,6 +123,10 @@ void Channel::removeUser(std::string name, Client *kicker, std::string message)
 	std::map<std::string, Client *>::iterator userpos=users.find(name);
 	if(userpos==users.end())
 		return;
+		
+	std::string msg = formatMessage(*(userpos->second), userpos->second->getNickname(), "PART", this->name, "");
+	send(userpos->second->getFd(), msg.c_str(), msg.size(), 0);
+
 	userpos->second->removeChannel(this);
 	users.erase(userpos);
 }
