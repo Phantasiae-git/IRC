@@ -92,7 +92,7 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 			mode_after_sign = true;
 			
 			std::string arg = "";
-			if(c == 'k' || c == 'o' || c == 'l')
+			if((c == 'k' && sign == '+') || c == 'o' || (c == 'l' && sign == '+'))
 			{
 				if((sign == '+' || c == 'o') && indexFlagArgs >= args.size())
 				{
