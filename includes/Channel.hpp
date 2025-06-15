@@ -54,6 +54,7 @@ public:
     void addToOperators(Client *user);
     std::string getFormattedUserList() const;
     int isInvited(Client *client);
+	void eraseUser(std::string name);
 };
 
 #endif // Channel_HPP

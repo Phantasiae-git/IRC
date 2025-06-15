@@ -106,12 +106,12 @@ void Server::disconnectClient(int i)
     std::cout << "client disconnected on socket " << pfds[i].fd << std::endl;
 
     std::map<int, Client*>::iterator it = clients.find(pfds[i].fd);
-    sendError(it->second->getFd(), 404, it->second->getNickname(), " ", "You have been disconnected. Please restart conection\n");
+    sendError(it->second->getFd(), 404, it->second->getNickname(), " ", "You have been disconnected. Please restart connection\n");
     
     close(pfds[i].fd);
     if (it != clients.end()) {
 
-        it->second->removeFromAll();
+    	it->second->removeFromAll();
         delete it->second;
         clients.erase(it);
     }

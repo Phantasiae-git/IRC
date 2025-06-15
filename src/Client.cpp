@@ -82,6 +82,7 @@ std::string Client::getPrefix() const {
 
 void Client::removeFromAll()
 {
-    for(std::map<std::string, Channel *>::iterator it = channels.begin(); it != channels.end(); it++)
-        it->second->removeUser(_username, this, "");
+	for(std::map<std::string, Channel *>::iterator it = channels.begin(); it != channels.end(); it++)
+		it->second->eraseUser(_username);
+	channels.clear();
 }
