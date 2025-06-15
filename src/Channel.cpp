@@ -119,12 +119,12 @@ int Channel::isOperator(Client *client)
 
 void Channel::removeUser(std::string name, Client *kicker, std::string message)
 {
+	broadcast(kicker, message);
 	std::map<std::string, Client *>::iterator userpos=users.find(name);
 	if(userpos==users.end())
 		return;
 	userpos->second->removeChannel(this);
 	users.erase(userpos);
-	broadcast(kicker, message);
 }
 
 void Channel::eraseUser(std::string name)
