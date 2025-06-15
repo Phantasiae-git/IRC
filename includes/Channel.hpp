@@ -53,6 +53,7 @@ public:
     void setInviteOnly(bool inviteOnly);
     void addToOperators(Client *user);
     std::string getFormattedUserList() const;
+    int isInvited(Client *client);
 };
 
 #endif // Channel_HPP

@@ -155,3 +155,7 @@ std::string Channel::getFormattedUserList() const {
 	return result;
 }
 
+int Channel::isInvited(Client *client)
+{
+	return (invited.find(client->getUsername())!=invited.end());
+}
