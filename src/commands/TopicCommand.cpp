@@ -41,12 +41,12 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
     {
         if (channel->getTopic().empty())
 		{
-			std::string msg = formatMessage(client, "localhost", "TOPIC", args[1], "No topic is set");
+			std::string msg = formatMessage(client, client.getHostname(), "TOPIC", args[1], "No topic is set");
 			sendMessage(client.getFd(), msg);
 		}
 		else
 		{
-			std::string msg = formatMessage(client, "localhost", "TOPIC", args[1], channel->getTopic());
+			std::string msg = formatMessage(client, client.getHostname(), "TOPIC", args[1], channel->getTopic());
 			sendMessage(client.getFd(), msg);
 		}
     }
