@@ -79,7 +79,7 @@ void Channel::addUser(Client *user, std::string pword)
 		return;
 	if(pass && pword!=password)
 		return;
-	users.insert(std::make_pair(user->getUsername(), user));;
+	users.insert(std::make_pair(user->getUsername(), user));
 	user->addChannel(name, this);
 }
 
@@ -94,13 +94,14 @@ void Channel::broadcast(Client *client, std::string msg)
 {
 	int sender_fd = client->getFd();
 
-	for (std::map<std::string, Client *>::iterator it=users.begin(); it!=users.end(); it++)
-	{   
+	for (std::map<std::string, Client *>::iterator it = users.begin(); it!=users.end(); it++)
+	{
 		int dest_fd = it->second->getFd();
 
 		if (dest_fd != sender_fd)
 		{
-			send(dest_fd, msg.c_str(), msg.size(), 0);
+			std::string newMsg = msg + "\r\n";
+			send(dest_fd, newMsg.c_str(), newMsg.size(), 0);
 		}
 	}
 }
@@ -118,12 +119,12 @@ int Channel::isOperator(Client *client)
 
 void Channel::removeUser(std::string name, Client *kicker, std::string message)
 {
+	broadcast(kicker, message);
 	std::map<std::string, Client *>::iterator userpos=users.find(name);
 	if(userpos==users.end())
 		return;
 	userpos->second->removeChannel(this);
 	users.erase(userpos);
-	broadcast(kicker, message);
 }
 
 void Channel::eraseUser(std::string name)
@@ -155,9 +156,10 @@ std::string Channel::getFormattedUserList() const {
 	}
 	for (std::map<std::string, Client*>::const_iterator it = users.begin(); it != users.end(); ++it) {
 		std::string user = it->second->getNickname();
+		if (operators.find(it->first) != operators.end())
+			continue;
 		if (!result.empty())
 			result += " ";
-		
 		result += user;
 	}
 	return result;

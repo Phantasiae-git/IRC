@@ -31,7 +31,7 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
 		return;
 	}
 	Channel *channel =it->second;
-	if(!channel->isOperator(&client) && channel->getT() == true)
+	if(!channel->isOperator(&client) && channel->getT() != true)
 	{
 		sendError(client.getFd(), 482, client.getNickname(), " ", "You're not a channel operator");
 		return;
@@ -39,16 +39,23 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
 
     if(args.size() == 2)
     {
-        if(channel->getTopic().empty())
-           sendMessage(client.getFd(), args[1] + " :No topic is set\n");
-        else
-            sendMessage(client.getFd(), args[1] + " :" + channel->getTopic() + '\n');
+        if (channel->getTopic().empty())
+		{
+			std::string msg = formatMessage(client, "localhost", "TOPIC", args[1], "No topic is set");
+			sendMessage(client.getFd(), msg);
+		}
+		else
+		{
+			std::string msg = formatMessage(client, "localhost", "TOPIC", args[1], channel->getTopic());
+			sendMessage(client.getFd(), msg);
+		}
     }
     else if(args.size() == 3)
     {
         channel->setTopic(args[2]);
-        channel->broadcast(&client, ":" + client.getNickname() + " TOPIC " + channel->getName() + ": New Topic Defined");
-        sendMessage(client.getFd(), ":" + client.getNickname() + " TOPIC " + channel->getName() + ": New Topic Defined");
+		std::string message = formatMessage(client, client.getNickname(), "TOPIC", channel->getName(), args[2]);
+        channel->broadcast(&client, message);
+        sendMessage(client.getFd(), message);
     }
 
     

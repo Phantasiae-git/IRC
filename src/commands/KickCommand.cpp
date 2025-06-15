@@ -41,6 +41,9 @@ void KickCommand::execute(Server &server, Client &client, const std::vector<std:
 		sendError(client.getFd(), 482, client.getNickname(), " ", "You're not a channel operator\n");
 		return;
 	}
-	std::string message= ": " + client.getNickname() + " KICK "+ args[1] + " " + args[2] +"\n";
+	std::string reason = "";
+	if (args.size() >= 4)
+		reason = args[3];
+	std::string message = formatMessage(client, client.getNickname(), "KICK", args[1] + " " + args[2], reason);
 	channel->removeUser(args[2], &client, message);
 }

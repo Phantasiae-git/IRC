@@ -44,14 +44,14 @@ void NickCommand::execute(Server &server, Client &client, const std::vector<std:
 	}
 	else
 	{
-		if(client.getNickname().empty())
-			sendMessage(client.getFd(), "Introducing new nick " + args[1] + "\n");
-		else
+		std::string message = formatMessage(client, client.getNickname(), "NICK", args[1], "");
+
+		std::map<std::string, Channel *> channels = client.getChannels();
+		for (std::map<std::string, Channel *>::iterator it = channels.begin(); it != channels.end(); ++it)
 		{
-			std::map<std::string, Channel *> channels = client.getChannels();
-			for(std::map<std::string, Channel *>::iterator it= channels.begin(); it!=channels.end(); it++)
-				it->second->broadcast(&client, client.getNickname() + ": changed his nickname to " + args[1]);
+			it->second->broadcast(&client, message);
 		}
+		sendMessage(client.getFd(), message);
 		client.setNickname(args[1]);
 	}
 }

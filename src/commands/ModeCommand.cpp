@@ -7,6 +7,12 @@ ModeCommand::~ModeCommand()
 {
 }
 
+void	ModeCommand::sendModeMessage(Channel* channel, Client* client, std::string mode) {
+	std::string modeMsg = ":" + client->getPrefix() + " MODE " + channel->getName() + " " + mode;
+	sendMessage(client->getFd(), modeMsg);
+	channel->broadcast(client, modeMsg);
+}
+
 bool ModeCommand::is_allNumbers(const char *str)
 {
 	for(size_t i = 0; i < strlen(str); i++)
@@ -92,20 +98,26 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 			mode_after_sign = true;
 			
 			std::string arg = "";
-			if((c == 'k' && sign == '+') || c == 'o' || (c == 'l' && sign == '+'))
+			if ((c == 'k' && sign == '+') || c == 'o' || (c == 'l' && sign == '+'))
 			{
-				if((sign == '+' || c == 'o') && indexFlagArgs >= args.size())
+				if (indexFlagArgs >= args.size())
 				{
-					sendError(client.getFd(), 461, client.getNickname(), " ", "Needs more parameters");
+					sendError(client.getFd(), 461, client.getNickname(), " ", "Not enough parameters for mode");
 					return;
 				}
 				arg = args[indexFlagArgs++];
 			}
 
 			if(c == 'i')
+			{
 				channel->setInviteOnly(sign == '+');
-			else if(c == 't')	
+				sendModeMessage(channel, &client, "+i");
+			}
+			else if(c == 't')
+			{
 				channel->setT(sign == '+');
+				sendModeMessage(channel, &client, "+t");
+			}
 			
 			else if(c == 'k')
 			{
@@ -113,14 +125,17 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 				{
 					if(!channel->getPassword().empty())
 					{
-                        sendError(client.getFd(), 467, client.getNickname(), channel->getName(), "Channel key already set");
-                        return;
-                    }
+						sendError(client.getFd(), 467, client.getNickname(), channel->getName(), "Channel key already set");
+						return;
+					}
 					channel->setPassword(arg);
-
+					sendModeMessage(channel, &client, "+k " + arg);
 				}
 				else if(sign == '-')
+				{
 					channel->setPassword("");
+					sendModeMessage(channel, &client, "-k");
+				}
 			}
 			else if(c == 'l')
 			{
@@ -128,20 +143,25 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 				{
 					if(!is_allNumbers(arg.c_str()))
 					{
-                        sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "Only numbers pls"); //mudar msg
-                        return;
-                    }
+             sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "Only numbers pls"); //mudar msg
+             return;
+          }
 					int limit = atoi(arg.c_str());
 					if(limit < (int)channel->getUsers().size())
 					{
-                        sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "Set a bigger limit or kick some people first"); //mudar msg
-                        return;
-                    }
+						sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "Set a bigger limit or kick some people first"); //mudar msg
+						return;
+					}
 					channel->setLimitUsers(limit);
-					std::cout << channel->getLimitUsers() << std::endl;
+					std::stringstream ss;
+					ss << limit;
+					sendModeMessage(channel, &client, "+l " + ss.str());
 				}
 				else if(sign == '-')
+				{
 					channel->setLimitUsers(0);
+					sendModeMessage(channel, &client, "-l");
+				}
 			}
 			else if(c == 'o')
 			{
@@ -154,7 +174,8 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 				}
 				if(sign=='+')
 				{
-					channel->addToOperators(targetClient->second);
+			      channel->addToOperators(targetClient->second);
+				    sendModeMessage(channel, &client, "+o " + targetClient->second->getNickname());
 				}
 				else
 				{
@@ -162,8 +183,7 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 						sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "Target is not an operator on this channel");
 				}
 			}
-		}
-		
+		}		
 	}
 	if(!mode_after_sign)
 	{
