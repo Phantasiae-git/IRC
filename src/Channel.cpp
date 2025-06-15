@@ -8,7 +8,7 @@ Channel::Channel(const std::string &name, Client *creator) : name(name)
 	operators.insert(std::make_pair(creator->getUsername(), creator));
 	invonly=0;
 	pass=0;
-	limitUsers = 0;
+	limitUsers=0;
 	t=0;
 	creator->addChannel(name, this);
 }
@@ -166,4 +166,13 @@ std::string Channel::getFormattedUserList() const {
 int Channel::isInvited(Client *client)
 {
 	return (invited.find(client->getUsername())!=invited.end());
+}
+
+int Channel::removeOp(Client *client)
+{
+	std::map<std::string, Client*>::iterator it = operators.find(client->getUsername());
+	if(it==operators.end())
+		return 0;
+	operators.erase(it);
+	return 1;
 }

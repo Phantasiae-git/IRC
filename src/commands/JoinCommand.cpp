@@ -35,18 +35,20 @@ void JoinCommand::execute(Server &server, Client &client, const std::vector<std:
 				sendError(client.getFd(), 475, client.getNickname(), it->first, "Cannot join channel (+k)");
 				return ;
 			}
-			it->second->addUser(&client, args[2]);
 		} 
-		else if(it->second->getInviteOnly())
+		if(it->second->getInviteOnly())
 		{
 			if(!(it->second->isInvited(&client)))
 			{
 				sendError(client.getFd(), 475, client.getNickname(), it->first, "Cannot join channel (+i)");
 				return ;
 			}
-			it->second->addUser(&client, "");
 		}
-		else
+		if((it->second->getLimitUsers()>0) && (it->second->getLimitUsers() <= it->second->getUsers().size()))//>0 means it exists
+		{
+			sendError(client.getFd(), 475, client.getNickname(), it->first, "Cannot join channel (+l)");
+			return;
+		}
 		it->second->addUser(&client, "");
 		sendMessage(client.getFd(), ":" + client.getNickname() + " JOIN :" + args[1]);
 		sendJoinReplies(it->second, &client, args[1]);
