@@ -52,10 +52,7 @@ void InviteCommand::execute(Server &server, Client &client, const std::vector<st
 		sendError(client.getFd(), 443, victim->getNickname(), "", "User is already on channel\n");
 		return;
 	}
-
-	CommandHandler handler;
 	channel->addToInvited(victim);
 	sendMessage(victim->getFd(), ":" + client.getPrefix() + " INVITE " + victim->getNickname() + " :" + channel->getName());
-	handler.handle(server, *victim, "JOIN " + channel->getName());
 	sendMessage(client.getFd(), ":ircserver 341 " + client.getNickname() + " " + victim->getNickname() + " " + channel->getName());
 }

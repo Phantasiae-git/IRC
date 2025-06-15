@@ -5,6 +5,9 @@ JoinCommand::JoinCommand() {}
 JoinCommand::~JoinCommand() {}
 
 void sendJoinReplies(Channel *chan, Client *client, std::string channelName) {
+	std::string joinMsg = formatMessage(*client, client->getNickname(), "JOIN", channelName, "");
+	sendMessage(client->getFd(), joinMsg);
+	chan->broadcast(client, joinMsg);
 	if (chan->getTopic().empty())
 		sendMessage(client->getFd(), ":ircserver 331 " + client->getNickname() + " " + channelName + " :No topic is set");
 	else
@@ -12,7 +15,6 @@ void sendJoinReplies(Channel *chan, Client *client, std::string channelName) {
 	std::string userList = chan->getFormattedUserList();
 	sendMessage(client->getFd(), ":ircserver 353 " + client->getNickname() + " = " + channelName + " :" + userList);
 	sendMessage(client->getFd(), ":ircserver 366 " + client->getNickname() + " " + channelName + " :End of /NAMES list");
-	chan->broadcast(client, ":" + client->getNickname() + " JOIN :" + channelName + "\r\n");
 }
 
 void JoinCommand::execute(Server &server, Client &client, const std::vector<std::string> &args) {
@@ -43,7 +45,6 @@ void JoinCommand::execute(Server &server, Client &client, const std::vector<std:
 		}
 		else
 			it->second->addUser(&client, "");
-		sendMessage(client.getFd(), ":" + client.getNickname() + " JOIN :" + args[1]);
 		sendJoinReplies(it->second, &client, args[1]);
 	}
 	else {
@@ -52,7 +53,6 @@ void JoinCommand::execute(Server &server, Client &client, const std::vector<std:
 		if (args.size() >= 3 && !args[2].empty()) {
 			newChannel->setPassword(args[2]);
 		}
-		sendMessage(client.getFd(), ":" + client.getNickname() + " JOIN :" + args[1]);
 		sendJoinReplies(newChannel, &client, args[1]);
 	}
 }

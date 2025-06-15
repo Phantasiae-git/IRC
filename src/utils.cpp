@@ -21,7 +21,8 @@ std::vector<std::string> split(const std::string &line)
 		{
 			std::string rest;
 			std::getline(iss, rest);
-			result.push_back(word + rest);
+			std::string trailing = word.substr(1) + rest;
+			result.push_back(trailing);
 			break ;
 		}
 		result.push_back(word);
@@ -90,13 +91,9 @@ int	get_listen_sock(int port)
 }
 
 void sendMessage(int fd, const std::string msg) {
-	std::ostringstream oss;
-	oss	<< msg;
 
-	std::string newMsg = oss.str() + "\r\n";
-	ssize_t sent = send(fd, newMsg.c_str(), newMsg.size(), 0);
-	if (sent == -1)
-		std::cerr << "send() failed for fd " << fd << ": " << strerror(errno) << std::endl;
+	std::string newMsg = msg + "\r\n";
+	send(fd, newMsg.c_str(), newMsg.size(), 0);
 }
 
 void sendError(int fd, int errorn, std::string nickname, std::string channelname, std::string msg) {
@@ -128,4 +125,13 @@ bool	is_validNickOrUser(const std::string &nickoruser)
 			return (false);
 	}
 	return (true);
+}
+
+std::string formatMessage(const Client& client, const std::string& user, std::string cmd, const std::string args, const std::string& trailing)
+{
+	std::string prefix = ":" + user + "!" + client.getUsername() + "@localhost";
+	std::string msg = prefix + " " + cmd + " " + args;
+	if (!trailing.empty())
+		msg += " :" + trailing;
+	return msg + "\r\n";
 }

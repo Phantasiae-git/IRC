@@ -79,7 +79,7 @@ void Channel::addUser(Client *user, std::string pword)
 		return;
 	if(pass && pword!=password)
 		return;
-	users.insert(std::make_pair(user->getUsername(), user));;
+	users.insert(std::make_pair(user->getUsername(), user));
 	user->addChannel(name, this);
 }
 
@@ -94,13 +94,14 @@ void Channel::broadcast(Client *client, std::string msg)
 {
 	int sender_fd = client->getFd();
 
-	for (std::map<std::string, Client *>::iterator it=users.begin(); it!=users.end(); it++)
-	{   
+	for (std::map<std::string, Client *>::iterator it = users.begin(); it!=users.end(); it++)
+	{
 		int dest_fd = it->second->getFd();
 
 		if (dest_fd != sender_fd)
 		{
-			send(dest_fd, msg.c_str(), msg.size(), 0);
+			std::string newMsg = msg + "\r\n";
+			send(dest_fd, newMsg.c_str(), newMsg.size(), 0);
 		}
 	}
 }

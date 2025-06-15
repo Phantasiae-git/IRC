@@ -8,8 +8,9 @@ ModeCommand::~ModeCommand()
 }
 
 void	ModeCommand::sendModeMessage(Channel* channel, Client* client, std::string mode) {
-	sendMessage(client->getFd(), ":" + client->getPrefix() + " MODE " + channel->getName() + " " + mode);
-	channel->broadcast(client, client->getNickname() + "sets mode " + mode);
+	std::string modeMsg = ":" + client->getPrefix() + " MODE " + channel->getName() + " " + mode;
+	sendMessage(client->getFd(), modeMsg);
+	channel->broadcast(client, modeMsg);
 }
 
 bool ModeCommand::is_allNumbers(const char *str)
@@ -97,11 +98,11 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 			mode_after_sign = true;
 			
 			std::string arg = "";
-			if(c == 'k' || c == 'o' || c == 'l')
+			if ((c == 'k' && sign == '+') || c == 'o' || (c == 'l' && sign == '+'))
 			{
-				if((sign == '+' || c == 'o') && indexFlagArgs >= args.size())
+				if (indexFlagArgs >= args.size())
 				{
-					sendError(client.getFd(), 461, client.getNickname(), " ", "Needs more parameters");
+					sendError(client.getFd(), 461, client.getNickname(), " ", "Not enough parameters for mode");
 					return;
 				}
 				arg = args[indexFlagArgs++];
@@ -152,7 +153,9 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 						return;
 					}
 					channel->setLimitUsers(limit);
-					sendModeMessage(channel, &client, "+l " + limit);
+					std::stringstream ss;
+					ss << limit;
+					sendModeMessage(channel, &client, "+l " + ss.str());
 				}
 				else if(sign == '-')
 				{
