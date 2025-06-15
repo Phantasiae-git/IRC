@@ -99,7 +99,6 @@ void Server::handleClientData(int i)
 				disconnectClient(i);			
 		}
 	}
-	
 }
 
 void Server::disconnectClient(int i)

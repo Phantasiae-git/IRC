@@ -4,10 +4,8 @@
 
 volatile sig_atomic_t g_stop = 0;
 
-void sigintHandler(int signum)
+void sigintHandler(int)
 {
-	(void)signum;
-	std::cout << "\nCaught SIGINT, server is shutting down..." << std::endl;
 	g_stop = 1;
 }
 
@@ -25,6 +23,7 @@ int main(int argc, char **argv)
 	}
 
 	signal(SIGINT, sigintHandler);
+	signal(SIGPIPE, SIG_IGN);
 
 	Server server(port, argv[2]);
 	if (!server.start()) {
