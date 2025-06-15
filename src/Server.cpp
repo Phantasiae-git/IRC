@@ -103,17 +103,19 @@ void Server::handleClientData(int i)
 
 void Server::disconnectClient(int i)
 {
-	std::cout << "client disconnected on socket " << pfds[i].fd << std::endl;
-	
-	std::map<int, Client*>::iterator it = clients.find(pfds[i].fd);
-	sendError(it->second->getFd(), 404, it->second->getNickname(), " ", "You have been disconnected. Please restart conection\n");
-	
-	close(pfds[i].fd);
-	if (it != clients.end()) {
-		delete it->second;
-		clients.erase(it);
-	}
-	pfds.erase(pfds.begin() + i);
+    std::cout << "client disconnected on socket " << pfds[i].fd << std::endl;
+
+    std::map<int, Client*>::iterator it = clients.find(pfds[i].fd);
+    sendError(it->second->getFd(), 404, it->second->getNickname(), " ", "You have been disconnected. Please restart connection (on terminal just press enter)\n");
+    
+    close(pfds[i].fd);
+    if (it != clients.end()) {
+
+    	it->second->removeFromAll();
+        delete it->second;
+        clients.erase(it);
+    }
+    pfds.erase(pfds.begin() + i);
 }
 
 bool Server::start()
