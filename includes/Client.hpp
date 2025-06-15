@@ -18,7 +18,7 @@ private:
     std::string _username;
 
     std::string _password;
-	std::map<std::string, Channel *> channels;
+    std::map<std::string, Channel *> channels;
 
 public:
     Client(int fd);
@@ -40,9 +40,10 @@ public:
     bool isAthenticated() const;
 
     void addChannel(std::string name, Channel *channel);
-	std::map<std::string, Channel *> getChannels();
+    std::map<std::string, Channel *> getChannels();
     Channel* findChannel(std::string name);
-	void removeChannel(Channel *channel);
+    void removeChannel(Channel *channel);
+    void removeFromAll();
 
     std::string getPassword();
     std::string getPrefix() const;
