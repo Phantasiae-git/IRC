@@ -133,5 +133,6 @@ std::string formatMessage(const Client& client, const std::string& user, std::st
 	std::string msg = prefix + " " + cmd + " " + args;
 	if (!trailing.empty())
 		msg += " :" + trailing;
+	std::cout << msg << std::endl;
 	return msg + "\r\n";
 }

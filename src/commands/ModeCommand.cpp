@@ -8,7 +8,7 @@ ModeCommand::~ModeCommand()
 }
 
 void	ModeCommand::sendModeMessage(Channel* channel, Client* client, std::string mode) {
-	std::string modeMsg = ":" + client->getPrefix() + " MODE " + channel->getName() + " " + mode;
+	std::string modeMsg = formatMessage(*client, client->getNickname(), "MODE", channel->getName(), mode);
 	sendMessage(client->getFd(), modeMsg);
 	channel->broadcast(client, modeMsg);
 }
