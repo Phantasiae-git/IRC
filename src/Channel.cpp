@@ -128,6 +128,14 @@ void Channel::removeUser(std::string name, Client *kicker, std::string message)
 	users.erase(userpos);
 }
 
+void Channel::eraseUser(std::string name)
+{
+	std::map<std::string, Client *>::iterator userpos=users.find(name);
+	if(userpos==users.end())
+		return;
+	users.erase(userpos);
+}
+
 std::map<std::string, Client *> Channel::getUsers(){
 	return users;
 }
