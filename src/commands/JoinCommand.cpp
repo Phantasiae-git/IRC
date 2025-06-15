@@ -42,13 +42,13 @@ void JoinCommand::execute(Server &server, Client &client, const std::vector<std:
 		{
 			if(!(it->second->isInvited(&client)))
 			{
-				sendError(client.getFd(), 475, client.getNickname(), it->first, "Cannot join channel (+i)");
+				sendError(client.getFd(), 473, client.getNickname(), it->first, "Cannot join channel (+i)");
 				return ;
 			}
 		}
 		if((it->second->getLimitUsers()>0) && (it->second->getLimitUsers() <= it->second->getUsers().size()))//>0 means it exists
 		{
-			sendError(client.getFd(), 475, client.getNickname(), it->first, "Cannot join channel (+l)");
+			sendError(client.getFd(), 471, client.getNickname(), it->first, "Cannot join channel (+l)");
 			return;
 		}
 		it->second->addUser(&client, "");
