@@ -79,3 +79,9 @@ void Client::removeChannel(Channel *channel)
 std::string Client::getPrefix() const {
 	return _nickname + "!" + _username + "@" + "localhost";
 }
+
+void Client::removeFromAll()
+{
+    for(std::map<std::string, Channel *>::iterator it = channels.begin(); it != channels.end(); it++)
+        it->second->removeUser(_username, this, "");
+}
