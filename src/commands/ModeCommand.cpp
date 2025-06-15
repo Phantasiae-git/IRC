@@ -110,13 +110,19 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 
 			if(c == 'i')
 			{
+				if(sign == '+')
+					sendModeMessage(channel, &client, "+i");
+				else
+					sendModeMessage(channel, &client, "-i");
 				channel->setInviteOnly(sign == '+');
-				sendModeMessage(channel, &client, "+i");
 			}
 			else if(c == 't')
 			{
+				if(sign == '+')
+					sendModeMessage(channel, &client, "+t");
+				else
+					sendModeMessage(channel, &client, "-t");
 				channel->setT(sign == '+');
-				sendModeMessage(channel, &client, "+t");
 			}
 			
 			else if(c == 'k')
@@ -143,9 +149,9 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 				{
 					if(!is_allNumbers(arg.c_str()))
 					{
-             sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "Only numbers pls"); //mudar msg
-             return;
-          }
+						sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "Only numbers pls"); //mudar msg
+						return;
+					}
 					int limit = atoi(arg.c_str());
 					if(limit < (int)channel->getUsers().size())
 					{
@@ -174,11 +180,12 @@ void ModeCommand::execute(Server &server, Client &client, const std::vector<std:
 				}
 				if(sign=='+')
 				{
-			      channel->addToOperators(targetClient->second);
-				    sendModeMessage(channel, &client, "+o " + targetClient->second->getNickname());
+					sendModeMessage(channel, &client, "+o " + targetClient->second->getNickname());
+					channel->addToOperators(targetClient->second);
 				}
 				else
 				{
+					sendModeMessage(channel, &client, "-o " + targetClient->second->getNickname());
 					if(!channel->removeOp(targetClient->second))
 						sendError(client.getFd(), 666, client.getNickname(), channel->getName(), "Target is not an operator on this channel");
 				}

@@ -27,5 +27,6 @@ bool	is_validNickOrUser(const std::string &nickoruser);
 void	sendMessage(int fd, std::string msg);
 void sendError(int fd, int errorn, std::string nickname, std::string channelname, std::string msg);
 std::string formatMessage(const Client& client, const std::string& user, std::string cmd, const std::string args, const std::string& trailing);
+std::string getHostname(const sockaddr* sa, socklen_t sa_len);
 
 #endif

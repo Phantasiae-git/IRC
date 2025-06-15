@@ -30,6 +30,21 @@ std::vector<std::string> split(const std::string &line)
 	return (result);
 }
 
+std::string getHostname(const sockaddr* sa, socklen_t sa_len) {
+
+	if (sa->sa_family != AF_INET) {
+		return std::string("Unknown");
+	}
+
+	char host[1024];
+	int status = getnameinfo(sa, sa_len, host, sizeof(host), NULL, 0, 0);
+	if (status != 0) {
+		sockaddr_in* sa_in = (sockaddr_in*)sa;
+		return std::string(inet_ntoa(sa_in->sin_addr));
+	}
+	return std::string(host);
+}
+
 bool	isValidPort(const char *portStr, int &portOut)
 {
 	long	port;
@@ -119,8 +134,8 @@ bool	is_validNickOrUser(const std::string &nickoruser)
 
 	for (size_t i = 1; i < nickoruser.length(); ++i)
 	{
-        if(nickoruser[i] <= 32 || nickoruser[i] == 127)
-            return (false);
+		if(nickoruser[i] <= 32 || nickoruser[i] == 127)
+			return (false);
 		if (!isalnum(nickoruser[i]) && specialChars.find(nickoruser[i]) == std::string::npos && nickoruser[i] != '-')
 			return (false);
 	}
@@ -129,7 +144,7 @@ bool	is_validNickOrUser(const std::string &nickoruser)
 
 std::string formatMessage(const Client& client, const std::string& user, std::string cmd, const std::string args, const std::string& trailing)
 {
-	std::string prefix = ":" + user + "!" + client.getUsername() + "@localhost";
+	std::string prefix = ":" + user + "!" + client.getUsername() + "@" + client.getHostname();
 	std::string msg = prefix + " " + cmd + " " + args;
 	if (!trailing.empty())
 		msg += " :" + trailing;

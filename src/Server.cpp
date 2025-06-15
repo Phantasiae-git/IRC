@@ -65,7 +65,7 @@ void Server::acceptNewClient()
 	}
 	pfds.push_back((pollfd){newClient->getFd(), POLLIN, 0});
 	std::cout << "yay! new connection from " << inet_ntoa(client_addr.sin_addr) << " on socket " << newClient->getFd() << std::endl;
-
+	newClient->setHostname(getHostname((sockaddr *)&client_addr, cl_addr_len));
 	clients.insert(std::make_pair(newClient->getFd(), newClient));
 }
 
