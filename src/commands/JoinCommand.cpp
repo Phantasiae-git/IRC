@@ -36,7 +36,11 @@ void JoinCommand::execute(Server &server, Client &client, const std::vector<std:
 				return ;
 			}
 			it->second->addUser(&client, args[2]);
-		} 
+		}
+		else if (it->second->getInviteOnly()) {
+			sendError(client.getFd(), 473, client.getNickname(), it->first, "Cannot join channel (+i)");
+			return ;
+		}
 		else
 			it->second->addUser(&client, "");
 		sendMessage(client.getFd(), ":" + client.getNickname() + " JOIN :" + args[1]);

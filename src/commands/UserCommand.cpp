@@ -48,13 +48,14 @@ void UserCommand::execute(Server &server, Client &client, const std::vector<std:
 
 	client.setUsername(args[1]);
 	client.setRegistered(true);
-	sendMessage(client.getFd(), client.getNickname() + " Set a new user " + args[1]);
+	sendMessage(client.getFd(), client.getNickname() + ": Set a new user " + args[1]);
 
 	if(client.getPassword() == server.getPassword())
 	{
-	   client.setAuthentication(true);
-	   sendMessage(client.getFd(), ":ircserver 001 " + client.getNickname() + " :Welcome to Our IRC Server");
-	   sendMessage(client.getFd(), ":ircserver 002 " + client.getNickname() + " :Your host is ircserver, running version 0.1");
-	   sendMessage(client.getFd(), ":ircserver 003 " + client.getNickname() + " :This server was created by Phantasiae, henrilindeza27 e ftomaz-c");
+		client.setAuthentication(true);
+		sendMessage(client.getFd(), ":ircserver 001 " + client.getNickname() + " :Welcome to Our IRC Server");
+		sendMessage(client.getFd(), ":ircserver 002 " + client.getNickname() + " :Your host is ircserver, running version 1.0.0");
+		sendMessage(client.getFd(), ":ircserver 003 " + client.getNickname() + " :This server was created by Phantasiae, henrilindeza27 and ftomaz-c");
+		sendMessage(client.getFd(), ":ircserver 004 " + client.getNickname() + " :ircserver 1.0.0 o itkol");
 	}
 }

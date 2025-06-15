@@ -147,9 +147,10 @@ std::string Channel::getFormattedUserList() const {
 	}
 	for (std::map<std::string, Client*>::const_iterator it = users.begin(); it != users.end(); ++it) {
 		std::string user = it->second->getNickname();
+		if (operators.find(it->first) != operators.end())
+			continue;
 		if (!result.empty())
 			result += " ";
-		
 		result += user;
 	}
 	return result;
