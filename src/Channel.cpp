@@ -149,6 +149,7 @@ std::string Channel::getFormattedUserList() const {
 		std::string user = it->second->getNickname();
 		if (!result.empty())
 			result += " ";
+		
 		result += user;
 	}
 	return result;
