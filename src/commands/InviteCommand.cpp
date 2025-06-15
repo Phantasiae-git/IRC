@@ -1,4 +1,5 @@
 #include "../../includes/commands/InviteCommand.hpp"
+#include "../../includes/CommandHandler.hpp"
 
 InviteCommand::InviteCommand() {}
 InviteCommand::~InviteCommand() {}
@@ -31,7 +32,7 @@ void InviteCommand::execute(Server &server, Client &client, const std::vector<st
 		return;
 	}
 	std::map<int, Client *> clients = server.getClients();
-	Client *victim;
+	Client *victim = NULL;
 	for(std::map<int, Client *>::iterator client_it=clients.begin(); client_it != clients.end(); client_it++)
 	{
 		if((client_it->second)->getNickname() == args[1])
@@ -52,7 +53,9 @@ void InviteCommand::execute(Server &server, Client &client, const std::vector<st
 		return;
 	}
 
+	CommandHandler handler;
 	channel->addToInvited(victim);
-	sendMessage(client.getFd(), victim->getNickname() + " Invited Successfully\n");
-	
+	sendMessage(victim->getFd(), ":" + client.getPrefix() + " INVITE " + victim->getNickname() + " :" + channel->getName());
+	handler.handle(server, *victim, "JOIN " + channel->getName());
+	sendMessage(client.getFd(), ":ircserver 341 " + client.getNickname() + " " + victim->getNickname() + " " + channel->getName());
 }
