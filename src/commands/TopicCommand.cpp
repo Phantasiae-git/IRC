@@ -31,7 +31,7 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
 		return;
 	}
 	Channel *channel =it->second;
-	if(!channel->isOperator(&client) && channel->getT() == true)
+	if(!channel->isOperator(&client) && channel->getT() != true)
 	{
 		sendError(client.getFd(), 482, client.getNickname(), " ", "You're not a channel operator");
 		return;
