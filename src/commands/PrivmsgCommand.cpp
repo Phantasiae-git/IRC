@@ -21,7 +21,7 @@ void PrivmsgCommand::execute(Server &server, Client &client, const std::vector<s
 	}
 	Channel* channelOut = client.findChannel(args[1]);
 	if (channelOut) {
-		channelOut->broadCast(&client, writeMsg(client.getNickname(), args[1], args[2]));
+		channelOut->broadcast(&client, writeMsg(client.getNickname(), args[1], args[2]));
 		return ;
 	}
 	Client* clientOut = server.findClient(args[1]);

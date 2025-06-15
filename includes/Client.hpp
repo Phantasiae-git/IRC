@@ -45,6 +45,7 @@ public:
 	void removeChannel(Channel *channel);
 
     std::string getPassword();
+    std::string getPrefix() const;
 
 };
 

@@ -1,6 +1,0 @@
-==18467== Memcheck, a memory error detector
-==18467== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==18467== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==18467== Command: ./ircserv 6667 a
-==18467== Parent PID: 18466
-==18467== 

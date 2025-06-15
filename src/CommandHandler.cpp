@@ -46,7 +46,6 @@ void CommandHandler::handle(Server &server, Client &client, const std::string &l
     }
 
     std::map<std::string, ACommand*>::iterator it = _commands.find(args[0]);
-
     if (it != _commands.end()) {
         it->second->execute(server, client, args);
     }

@@ -81,7 +81,6 @@ void Channel::addUser(Client *user, std::string pword)
 		return;
 	users.insert(std::make_pair(user->getUsername(), user));;
 	user->addChannel(name, this);
-	sendMessage(user->getFd(), "Joined Channel\n");
 }
 
 void Channel::addToInvited(Client *user)
@@ -91,19 +90,19 @@ void Channel::addToInvited(Client *user)
 	invited.insert(std::make_pair(user->getUsername(), user));;
 }
 
-void Channel::broadCast(Client *client, std::string msg)
+void Channel::broadcast(Client *client, std::string msg)
 {
-    int sender_fd = client->getFd();
+	int sender_fd = client->getFd();
 
-    for (std::map<std::string, Client *>::iterator it=users.begin(); it!=users.end(); it++)
-    {   
-        int dest_fd = it->second->getFd();
+	for (std::map<std::string, Client *>::iterator it=users.begin(); it!=users.end(); it++)
+	{   
+		int dest_fd = it->second->getFd();
 
-        if (dest_fd != sender_fd)
-        {
+		if (dest_fd != sender_fd)
+		{
 			send(dest_fd, msg.c_str(), msg.size(), 0);
-        }
-    }
+		}
+	}
 }
 
 
@@ -124,7 +123,7 @@ void Channel::removeUser(std::string name, Client *kicker, std::string message)
 		return;
 	userpos->second->removeChannel(this);
 	users.erase(userpos);
-	broadCast(kicker, message);
+	broadcast(kicker, message);
 }
 
 std::map<std::string, Client *> Channel::getUsers(){
@@ -137,3 +136,21 @@ void Channel::addToOperators(Client *user)
    		return;
 	operators.insert(std::make_pair(user->getUsername(), user));;
 }
+std::string Channel::getFormattedUserList() const {
+
+	std::string result;
+	for (std::map<std::string, Client*>::const_iterator it = operators.begin(); it != operators.end(); ++it) {
+		std::string op = it->second->getNickname();
+		if (!result.empty())
+			result += " ";
+		result += "@" + op;
+	}
+	for (std::map<std::string, Client*>::const_iterator it = users.begin(); it != users.end(); ++it) {
+		std::string user = it->second->getNickname();
+		if (!result.empty())
+			result += " ";
+		result += user;
+	}
+	return result;
+}
+

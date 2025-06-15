@@ -50,7 +50,7 @@ void NickCommand::execute(Server &server, Client &client, const std::vector<std:
 		{
 			std::map<std::string, Channel *> channels = client.getChannels();
 			for(std::map<std::string, Channel *>::iterator it= channels.begin(); it!=channels.end(); it++)
-				it->second->broadCast(&client, client.getNickname() + ": changed his nickname to " + args[1]);
+				it->second->broadcast(&client, client.getNickname() + ": changed his nickname to " + args[1]);
 		}
 		client.setNickname(args[1]);
 	}

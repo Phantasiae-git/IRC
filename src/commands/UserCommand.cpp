@@ -26,33 +26,35 @@ void UserCommand::execute(Server &server, Client &client, const std::vector<std:
 	}
 	if(client.isRegistered())
 	{
-		sendError(client.getFd(), 462, client.getNickname(), " ", "You're already registered!\n");
+		sendError(client.getFd(), 462, client.getNickname(), " ", "You're already registered!");
 		return;
 	}
 
-	if(args.size() != 2 )
+	if(args.size() < 2)
 	{
-		sendError(client.getFd(), 461, client.getNickname(), " ", "Needs more parameters\n");
+		sendError(client.getFd(), 461, client.getNickname(), " ", "Needs more parameters");
 		return;
 	}
 	if(!is_validNickOrUser(args[1]))
 	{
-		sendError(client.getFd(), 432, client.getNickname(), " ", "Not a valid username\n");
+		sendError(client.getFd(), 432, client.getNickname(), " ", "Not a valid username");
 		return;
 	}
 	else if(is_duplicateUser(server, args[1]))
 	{
-		sendError(client.getFd(), 433, client.getNickname(), " ", "Username is already in use\n");
+		sendError(client.getFd(), 433, client.getNickname(), " ", "Username is already in use");
 		return;
 	}
 
 	client.setUsername(args[1]);
 	client.setRegistered(true);
-	sendMessage(client.getFd(), client.getNickname() + " Set a new user " + args[1] + "\n");
+	sendMessage(client.getFd(), client.getNickname() + " Set a new user " + args[1]);
 
 	if(client.getPassword() == server.getPassword())
 	{
 	   client.setAuthentication(true);
-	   sendMessage(client.getFd(), "You have successfully enter on server\n");
-	}   
+	   sendMessage(client.getFd(), ":ircserver 001 " + client.getNickname() + " :Welcome to Our IRC Server");
+	   sendMessage(client.getFd(), ":ircserver 002 " + client.getNickname() + " :Your host is ircserver, running version 0.1");
+	   sendMessage(client.getFd(), ":ircserver 003 " + client.getNickname() + " :This server was created by Phantasiae, henrilindeza27 e ftomaz-c");
+	}
 }

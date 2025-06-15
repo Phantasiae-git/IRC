@@ -35,7 +35,7 @@ public:
 	void addUser(Client *user, std::string password);
 
     void addToInvited(Client *user);
-	void broadCast(Client *client, std::string msg);
+	void broadcast(Client *client, std::string msg);
     std::string getPassword() const;
     void setPassword(std::string pass);
 	std::string getName();
@@ -52,7 +52,7 @@ public:
     bool getInviteOnly() const;
     void setInviteOnly(bool inviteOnly);
     void addToOperators(Client *user);
-
+    std::string getFormattedUserList() const;
 };
 
 #endif // Channel_HPP

@@ -91,23 +91,20 @@ int	get_listen_sock(int port)
 
 void sendMessage(int fd, const std::string msg) {
 	std::ostringstream oss;
-	oss << "\033[32m"
-		<< msg
-		<< "\033[0m";
+	oss	<< msg;
 
-	std::string newMsg = oss.str();
-	send(fd, newMsg.c_str(), newMsg.size(), 0);
+	std::string newMsg = oss.str() + "\r\n";
+	ssize_t sent = send(fd, newMsg.c_str(), newMsg.size(), 0);
+	if (sent == -1)
+		std::cerr << "send() failed for fd " << fd << ": " << strerror(errno) << std::endl;
 }
-
 
 void sendError(int fd, int errorn, std::string nickname, std::string channelname, std::string msg) {
 	std::ostringstream oss;
-	oss << "\033[31m"
-		<< ":" << nickname << " " 
+	oss << ":" << nickname << " " 
 		<< errorn << " "
 		<< channelname << " :"
-		<< msg
-		<< "\033[0m";
+		<< msg;
 
 	std::string newMsg = oss.str() + "\r\n";
 	send(fd, newMsg.c_str(), newMsg.size(), 0);

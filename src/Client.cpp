@@ -75,3 +75,7 @@ void Client::removeChannel(Channel *channel)
 		return;
 	channels.erase(channelpos);
 }
+
+std::string Client::getPrefix() const {
+	return _nickname + "!" + _username + "@" + "localhost";
+}

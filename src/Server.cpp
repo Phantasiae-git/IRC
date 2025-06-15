@@ -88,7 +88,7 @@ void Server::handleClientData(int i)
 	{
 		_input_buffers[sender_fd].append(buf, nbytes);
 		size_t pos;
-		while ((pos = _input_buffers[sender_fd].find("\n")) != std::string::npos) {
+		while ((pos = _input_buffers[sender_fd].find("\r\n")) != std::string::npos) {
 			std::string msg = _input_buffers[sender_fd].substr(0, pos);
 			_input_buffers[sender_fd].erase(0, pos + 2);
 			std::map<int, Client*>::iterator it = clients.find(sender_fd);
@@ -101,6 +101,7 @@ void Server::handleClientData(int i)
 	}
 	
 }
+
 void Server::disconnectClient(int i)
 {
 	std::cout << "client disconnected on socket " << pfds[i].fd << std::endl;

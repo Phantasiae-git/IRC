@@ -19,7 +19,7 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
 	}
     if(args[1][0]!='#')
 	{
-		sendError(client.getFd(), 476, client.getNickname(), " ", "Bad channel mask\n");
+		sendError(client.getFd(), 476, client.getNickname(), " ", "Bad channel mask");
 		return;
 	}
     std::map<std::string, Channel *> channels;
@@ -27,13 +27,13 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
 	std::map<std::string, Channel *>::iterator it=channels.find(args[1]);
 	if(it==channels.end())
 	{
-		sendError(client.getFd(), 442, client.getNickname(), " ", "You're not on the channel\n");
+		sendError(client.getFd(), 442, client.getNickname(), " ", "You're not on the channel");
 		return;
 	}
 	Channel *channel =it->second;
 	if(!channel->isOperator(&client) && channel->getT() == true)
 	{
-		sendError(client.getFd(), 482, client.getNickname(), " ", "You're not a channel operator\n");
+		sendError(client.getFd(), 482, client.getNickname(), " ", "You're not a channel operator");
 		return;
 	}
 
@@ -47,8 +47,8 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
     else if(args.size() == 3)
     {
         channel->setTopic(args[2]);
-        channel->broadCast(&client, ":" + client.getNickname() + " TOPIC " + channel->getName() + ": New Topic Define\n");
-        sendMessage(client.getFd(), ":" + client.getNickname() + " TOPIC " + channel->getName() + ": New Topic Define\n");
+        channel->broadcast(&client, ":" + client.getNickname() + " TOPIC " + channel->getName() + ": New Topic Defined");
+        sendMessage(client.getFd(), ":" + client.getNickname() + " TOPIC " + channel->getName() + ": New Topic Defined");
     }
 
     
