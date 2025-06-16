@@ -37,19 +37,19 @@ void TopicCommand::execute(Server &server, Client &client, const std::vector<std
 		return;
 	}
 
-    if(args.size() == 2)
-    {
-        if (channel->getTopic().empty())
+    if (args.size() == 2)
+	{
+		if (channel->getTopic().empty())
 		{
-			std::string msg = formatMessage(client, client.getHostname(), "TOPIC", args[1], "No topic is set");
+			std::string msg = ":ircserver 331 " + client.getNickname() + " " + args[1] + " :No topic is set\r\n";
 			sendMessage(client.getFd(), msg);
 		}
 		else
 		{
-			std::string msg = formatMessage(client, client.getHostname(), "TOPIC", args[1], channel->getTopic());
+			std::string msg = ":ircserver 332 " + client.getNickname() + " " + args[1] + " :" + channel->getTopic() + "\r\n";
 			sendMessage(client.getFd(), msg);
 		}
-    }
+	}
     else if(args.size() == 3)
     {
         channel->setTopic(args[2]);
