@@ -51,6 +51,7 @@ void CommandHandler::handle(Server &server, Client &client, const std::string &l
         it->second->execute(server, client, args);
     }
     else {
-        sendMessage(client.getFd(), "421 " + args[0] + " : Unkown command\n");
+        if(args[0] != "CAP" && args[0] != "WHO")
+            sendMessage(client.getFd(), "421 " + args[0] + " : Unkonwn command\n");
     }
 }
